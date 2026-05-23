@@ -23,6 +23,7 @@
       <nav aria-label="Primary navigation">
         <a href="#loans">Loans</a>
         <a href="#requirements">Requirements</a>
+        <a href="#login">Login</a>
         <a href="#apply">Apply</a>
       </nav>
     </header>
@@ -137,17 +138,70 @@
         </div>
       </section>
 
+      <section id="login" class="section login-section">
+        <div class="section-heading">
+          <p class="eyebrow">Secure entry</p>
+          <h2>Login before sending a loan query</h2>
+          <p>
+            Customers can login with basic contact details and submit only loan enquiries. Admin access is reserved for <strong>vvltdpvt@gmail.com</strong>.
+          </p>
+        </div>
+        <div class="login-grid">
+          <form class="login-card" id="user-login-form">
+            <h3>User login</h3>
+            <p>Login once, then send your loan query and documents.</p>
+            <label>
+              Full name
+              <input id="login-name" type="text" autocomplete="name" required />
+            </label>
+            <label>
+              Email address
+              <input id="login-email" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              Mobile number
+              <input id="login-mobile" type="tel" autocomplete="tel" pattern="[0-9+\-\s]{10,15}" required />
+            </label>
+            <button class="submit-button" type="submit">Login as user</button>
+            <p class="status-text" id="user-status">No user logged in.</p>
+          </form>
+
+          <form class="login-card admin-card" id="admin-login-form">
+            <h3>Admin login</h3>
+            <p>Only the registered admin email can open this panel.</p>
+            <label>
+              Admin email
+              <input id="admin-email" type="email" value="vvltdpvt@gmail.com" autocomplete="username" required />
+            </label>
+            <label>
+              Admin password
+              <input id="admin-password" type="password" autocomplete="current-password" required />
+            </label>
+            <button class="submit-button" type="submit">Open admin panel</button>
+            <div class="admin-dashboard" id="admin-dashboard" hidden>
+              <h4>Admin panel</h4>
+              <p>Receiving email: <strong>vvltdpvt@gmail.com</strong></p>
+              <p>Saved enquiries on this browser: <strong id="query-count">0</strong></p>
+              <p>Document limit: <strong>10 MB per upload</strong></p>
+            </div>
+            <p class="status-text" id="admin-status">Admin panel locked.</p>
+          </form>
+        </div>
+      </section>
+
       <section id="apply" class="section apply-section">
         <div class="form-intro">
           <p class="eyebrow">Application form</p>
           <h2>Send loan requirement to Varsha Venture</h2>
           <p>
-            Fill the details carefully. Your enquiry and uploaded document will be sent to <strong>vvltdpvt@gmail.com</strong>.
+            Fill the details carefully after user login. Your enquiry and uploaded document will be sent to <strong>vvltdpvt@gmail.com</strong>.
           </p>
+          <div class="login-reminder" id="login-reminder">Please login as a user before submitting the loan query.</div>
         </div>
 
         <form
           class="loan-form"
+          id="loan-form"
           action="https://formsubmit.co/vvltdpvt@gmail.com"
           method="POST"
           enctype="multipart/form-data"
@@ -156,6 +210,8 @@
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_template" value="table" />
           <input type="hidden" name="_next" value="" />
+          <input type="hidden" name="Logged in user email" id="logged-user-email" value="" />
+          <input type="hidden" name="Submitted from website at" id="submitted-at" value="" />
 
           <div class="form-grid">
             <label>
@@ -173,6 +229,29 @@
             <label>
               City
               <input name="City" type="text" autocomplete="address-level2" required />
+            </label>
+            <label>
+              Date of birth
+              <input name="Date of birth" type="date" required />
+            </label>
+            <label>
+              Gender
+              <select name="Gender" required>
+                <option value="">Select gender</option>
+                <option>Female</option>
+                <option>Male</option>
+                <option>Other</option>
+                <option>Prefer not to say</option>
+              </select>
+            </label>
+            <label>
+              Marital status
+              <select name="Marital status" required>
+                <option value="">Select status</option>
+                <option>Single</option>
+                <option>Married</option>
+                <option>Other</option>
+              </select>
             </label>
             <label>
               Loan type
@@ -218,6 +297,35 @@
               <input name="Monthly income" type="number" min="0" step="1000" placeholder="Example: 45000" required />
             </label>
             <label>
+              Existing monthly EMI
+              <input name="Existing monthly EMI" type="number" min="0" step="1000" placeholder="Example: 8000" required />
+            </label>
+            <label>
+              Credit score range
+              <select name="Credit score range" required>
+                <option value="">Select range</option>
+                <option>750 and above</option>
+                <option>700 to 749</option>
+                <option>650 to 699</option>
+                <option>Below 650</option>
+                <option>Not sure</option>
+              </select>
+            </label>
+            <label>
+              Company or business name
+              <input name="Company or business name" type="text" required />
+            </label>
+            <label>
+              Work or business experience
+              <select name="Work or business experience" required>
+                <option value="">Select experience</option>
+                <option>Less than 1 year</option>
+                <option>1 to 2 years</option>
+                <option>2 to 5 years</option>
+                <option>5 years or above</option>
+              </select>
+            </label>
+            <label>
               PAN number
               <input name="PAN number" type="text" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" placeholder="ABCDE1234F" required />
             </label>
@@ -234,6 +342,32 @@
                 <option>Not sure</option>
               </select>
             </label>
+            <label>
+              Property or vehicle details
+              <input name="Property or vehicle details" type="text" placeholder="Optional if not applicable" />
+            </label>
+            <label>
+              Preferred contact time
+              <select name="Preferred contact time" required>
+                <option value="">Select time</option>
+                <option>Morning</option>
+                <option>Afternoon</option>
+                <option>Evening</option>
+              </select>
+            </label>
+            <label>
+              Document type uploaded
+              <select name="Document type uploaded" required>
+                <option value="">Select document</option>
+                <option>PAN card</option>
+                <option>Aadhaar card</option>
+                <option>Bank statement</option>
+                <option>Salary slip</option>
+                <option>Business proof</option>
+                <option>Property document</option>
+                <option>Combined loan document</option>
+              </select>
+            </label>
           </div>
 
           <label class="wide">
@@ -244,10 +378,14 @@
             Loan purpose
             <textarea name="Loan purpose" rows="4" placeholder="Tell us why you need the loan and any important background." required></textarea>
           </label>
+          <label class="wide">
+            Additional loan information
+            <textarea name="Additional loan information" rows="4" placeholder="Mention bank preference, co-applicant details, collateral value, repayment plan, or any special note."></textarea>
+          </label>
           <label class="wide file-field">
-            Upload document
-            <input name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required />
-            <span>Accepted: PDF, JPG, PNG, DOC, DOCX. Upload one clear document or combined file.</span>
+            Upload document up to 10 MB
+            <input id="loan-document" name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required />
+            <span id="file-help">Accepted: PDF, JPG, PNG, DOC, DOCX. Upload one clear document or combined file up to 10 MB.</span>
           </label>
 
           <label class="consent">
@@ -265,10 +403,113 @@
       <a href="mailto:vvltdpvt@gmail.com">vvltdpvt@gmail.com</a>
     </footer>
     <script>
+      const ADMIN_EMAIL = 'vvltdpvt@gmail.com';
+      const ADMIN_PASSWORD = 'VVLoan@2026';
+      const MAX_FILE_SIZE = 10 * 1024 * 1024;
       const nextInput = document.querySelector('input[name="_next"]');
-      if (nextInput) {
-        nextInput.value = new URL('thanks.html', window.location.href).href;
-      }
+      const userForm = document.querySelector('#user-login-form');
+      const adminForm = document.querySelector('#admin-login-form');
+      const loanForm = document.querySelector('#loan-form');
+      const userStatus = document.querySelector('#user-status');
+      const adminStatus = document.querySelector('#admin-status');
+      const loginReminder = document.querySelector('#login-reminder');
+      const adminDashboard = document.querySelector('#admin-dashboard');
+      const queryCount = document.querySelector('#query-count');
+      const loggedUserEmail = document.querySelector('#logged-user-email');
+      const submittedAt = document.querySelector('#submitted-at');
+      const fileInput = document.querySelector('#loan-document');
+      const fileHelp = document.querySelector('#file-help');
+
+      const getUser = () => JSON.parse(localStorage.getItem('vvUser') || 'null');
+      const setQueryCount = () => {
+        if (queryCount) {
+          queryCount.textContent = localStorage.getItem('vvQueryCount') || '0';
+        }
+      };
+      const refreshUserState = () => {
+        const user = getUser();
+        if (nextInput) {
+          nextInput.value = new URL('thanks.html', window.location.href).href;
+        }
+        if (user) {
+          userStatus.textContent = `Logged in as ${user.name} (${user.email}).`;
+          loginReminder.textContent = `Logged in as ${user.name}. You can now submit the loan query.`;
+          loggedUserEmail.value = user.email;
+          loanForm.classList.remove('locked-form');
+        } else {
+          userStatus.textContent = 'No user logged in.';
+          loginReminder.textContent = 'Please login as a user before submitting the loan query.';
+          loggedUserEmail.value = '';
+          loanForm.classList.add('locked-form');
+        }
+      };
+
+      userForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const user = {
+          name: document.querySelector('#login-name').value.trim(),
+          email: document.querySelector('#login-email').value.trim(),
+          mobile: document.querySelector('#login-mobile').value.trim(),
+        };
+        localStorage.setItem('vvUser', JSON.stringify(user));
+        document.querySelector('input[name="Full name"]').value = user.name;
+        document.querySelector('input[name="Email address"]').value = user.email;
+        document.querySelector('input[name="Mobile number"]').value = user.mobile;
+        refreshUserState();
+        document.querySelector('#apply').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      adminForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const email = document.querySelector('#admin-email').value.trim().toLowerCase();
+        const password = document.querySelector('#admin-password').value;
+        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+          adminDashboard.hidden = false;
+          adminStatus.textContent = 'Admin panel opened.';
+          setQueryCount();
+        } else {
+          adminDashboard.hidden = true;
+          adminStatus.textContent = 'Invalid admin email or password.';
+        }
+      });
+
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+        if (file.size > MAX_FILE_SIZE) {
+          fileInput.value = '';
+          fileHelp.textContent = 'File is bigger than 10 MB. Please upload a smaller document.';
+          fileHelp.classList.add('error-text');
+        } else {
+          fileHelp.textContent = `${file.name} selected. File size is within the 10 MB limit.`;
+          fileHelp.classList.remove('error-text');
+        }
+      });
+
+      loanForm.addEventListener('submit', (event) => {
+        const user = getUser();
+        const file = fileInput.files[0];
+        if (!user) {
+          event.preventDefault();
+          loginReminder.textContent = 'Login as a user first, then submit the loan query.';
+          document.querySelector('#login').scrollIntoView({ behavior: 'smooth' });
+          return;
+        }
+        if (file && file.size > MAX_FILE_SIZE) {
+          event.preventDefault();
+          fileInput.value = '';
+          fileHelp.textContent = 'File is bigger than 10 MB. Please upload a smaller document.';
+          fileHelp.classList.add('error-text');
+          return;
+        }
+        submittedAt.value = new Date().toLocaleString();
+        const count = Number(localStorage.getItem('vvQueryCount') || '0') + 1;
+        localStorage.setItem('vvQueryCount', String(count));
+        setQueryCount();
+      });
+
+      setQueryCount();
+      refreshUserState();
     </script>
   </body>
 </html>

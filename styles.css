@@ -249,6 +249,7 @@ h3 {
 .requirement-panel,
 .terms-box,
 .loan-form,
+.login-card,
 .thanks-card {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -310,6 +311,63 @@ footer {
   color: rgba(255, 255, 255, 0.78);
 }
 
+.login-section {
+  background: linear-gradient(180deg, #f5f8fb 0%, #ffffff 100%);
+}
+
+.login-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.login-card {
+  display: grid;
+  gap: 16px;
+  padding: clamp(20px, 3vw, 30px);
+}
+
+.login-card p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.admin-card {
+  background: #f9fbfc;
+}
+
+.admin-dashboard {
+  padding: 16px;
+  border: 1px solid rgba(11, 122, 117, 0.24);
+  border-radius: 8px;
+  background: #e9f4f2;
+}
+
+.admin-dashboard h4,
+.admin-dashboard p {
+  margin: 0;
+}
+
+.admin-dashboard p + p {
+  margin-top: 8px;
+}
+
+.status-text,
+.login-reminder {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #eef3f7;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.login-reminder {
+  margin-top: 18px;
+}
+
 .apply-section {
   display: grid;
   grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
@@ -324,6 +382,21 @@ footer {
 
 .loan-form {
   padding: clamp(18px, 3vw, 32px);
+}
+
+.locked-form {
+  position: relative;
+}
+
+.locked-form::before {
+  content: "Login required before submission";
+  display: block;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fff7e0;
+  color: #7a4d00;
+  font-weight: 900;
 }
 
 .form-grid {
@@ -374,6 +447,10 @@ textarea:focus {
   font-size: 13px;
   font-weight: 600;
   line-height: 1.5;
+}
+
+.file-field .error-text {
+  color: #b42318;
 }
 
 .consent {
@@ -477,6 +554,7 @@ footer a {
   .quick-stats,
   .loan-grid,
   .requirement-layout,
+  .login-grid,
   .form-grid {
     grid-template-columns: 1fr;
   }
