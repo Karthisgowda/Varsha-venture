@@ -5,444 +5,546 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Varsha Venture helps customers apply for personal, business, vehicle, home, and mortgage loans with simple eligibility checks and document collection."
+      content="Varsha Venture loan enquiry portal with user login, document upload, and admin dashboard."
     />
-    <title>Varsha Venture | Loan Support</title>
+    <title>Varsha Venture | Loan Portal</title>
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="#top" aria-label="Varsha Venture home">
-        <span class="brand-mark">VV</span>
-        <span>
-          <strong>Varsha Venture</strong>
-          <small>Loan Support Desk</small>
-        </span>
-      </a>
-      <nav aria-label="Primary navigation">
-        <a href="#loans">Loans</a>
-        <a href="#requirements">Requirements</a>
-        <a href="#login">Login</a>
-        <a href="#apply">Apply</a>
-      </nav>
-    </header>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" data-view-link="home" aria-label="Varsha Venture home">
+          <span class="brand-mark">VV</span>
+          <span>
+            <strong>Varsha Venture</strong>
+            <small>Loan Portal</small>
+          </span>
+        </a>
 
-    <main id="top">
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Quick loan enquiry and document collection</p>
-          <h1>Loan support for people who want a clear next step.</h1>
-          <p class="lead">
-            Share your basic details, loan requirement, income information, and supporting document. The enquiry is mailed to the Varsha Venture team for follow-up.
-          </p>
-          <div class="hero-actions">
-            <a class="button primary" href="#apply">Start application</a>
-            <a class="button secondary" href="#requirements">Check requirements</a>
+        <nav class="side-nav" aria-label="Portal navigation">
+          <button class="nav-item active" type="button" data-view-link="home">Overview</button>
+          <button class="nav-item" type="button" data-view-link="user-login">User Login</button>
+          <button class="nav-item" type="button" data-view-link="loan-form">Loan Details</button>
+          <button class="nav-item" type="button" data-view-link="admin-login">Admin Login</button>
+          <button class="nav-item admin-only" type="button" data-view-link="admin-dashboard" hidden>Dashboard</button>
+        </nav>
+
+        <div class="sidebar-card">
+          <span class="card-label">Admin</span>
+          <strong>vvltdpvt@gmail.com</strong>
+          <small>Client enquiries are emailed automatically after submission.</small>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Loan enquiry system</p>
+            <h1 id="view-title">Professional loan query portal</h1>
           </div>
-          <dl class="quick-stats" aria-label="Loan highlights">
-            <div>
-              <dt>5+</dt>
-              <dd>Loan types</dd>
+          <div class="session-pill" id="session-pill">Guest session</div>
+        </header>
+
+        <section class="view active" id="view-home" data-title="Professional loan query portal">
+          <div class="view-grid hero-view">
+            <div class="hero-copy">
+              <p class="eyebrow">Varsha Venture</p>
+              <h2>Login, add loan details, upload documents, and send the enquiry by email.</h2>
+              <p class="lead">
+                Users can only submit loan details after login. Admin access is separate and opens a dashboard for locally saved enquiries.
+              </p>
+              <div class="hero-actions">
+                <button class="button primary" type="button" data-view-link="user-login">Login as user</button>
+                <button class="button secondary" type="button" data-view-link="admin-login">Admin login</button>
+              </div>
+              <dl class="quick-stats" aria-label="Loan portal highlights">
+                <div>
+                  <dt>10 MB</dt>
+                  <dd>Document limit</dd>
+                </div>
+                <div>
+                  <dt>33</dt>
+                  <dd>Data points</dd>
+                </div>
+                <div>
+                  <dt>Email</dt>
+                  <dd>Auto delivery</dd>
+                </div>
+              </dl>
             </div>
-            <div>
-              <dt>24h</dt>
-              <dd>Response target</dd>
+            <div class="hero-media">
+              <img
+                src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80"
+                alt="Loan advisor reviewing documents with a customer"
+              />
             </div>
-            <div>
-              <dt>100%</dt>
-              <dd>Document checklist</dd>
+          </div>
+
+          <div class="loan-grid">
+            <article>
+              <span>01</span>
+              <h3>Personal Loan</h3>
+              <p>For medical needs, education, travel, family expenses, or debt consolidation.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Business Loan</h3>
+              <p>For working capital, equipment purchase, stock, shop upgrades, and expansion.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Home Loan</h3>
+              <p>For home purchase, construction, renovation, balance transfer, and top-up needs.</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>Vehicle Loan</h3>
+              <p>For two-wheeler, car, commercial vehicle, used vehicle, and refinance enquiries.</p>
+            </article>
+            <article>
+              <span>05</span>
+              <h3>Mortgage Loan</h3>
+              <p>For loan against property with ownership and property document review.</p>
+            </article>
+            <article>
+              <span>06</span>
+              <h3>Gold Loan</h3>
+              <p>For short-term funding needs based on KYC verification and gold valuation.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-user-login" data-title="User login">
+          <div class="center-panel">
+            <form class="portal-card auth-card" id="user-login-form">
+              <p class="eyebrow">Customer access</p>
+              <h2>User login</h2>
+              <p>Enter customer details once. After login, the loan upload page opens automatically.</p>
+              <label>
+                Full name
+                <input id="login-name" type="text" autocomplete="name" required />
+              </label>
+              <label>
+                Email address
+                <input id="login-email" type="email" autocomplete="email" required />
+              </label>
+              <label>
+                Mobile number
+                <input id="login-mobile" type="tel" autocomplete="tel" pattern="[0-9+\-\s]{10,15}" required />
+              </label>
+              <button class="submit-button" type="submit">Continue to loan details</button>
+              <p class="status-text" id="user-status">No user logged in.</p>
+            </form>
+          </div>
+        </section>
+
+        <section class="view" id="view-loan-form" data-title="Loan details upload">
+          <div class="portal-card locked-message" id="locked-message">
+            <h2>Login required</h2>
+            <p>Customer login is required before loan details and documents can be uploaded.</p>
+            <button class="button primary" type="button" data-view-link="user-login">Login as user</button>
+          </div>
+
+          <form
+            class="portal-card loan-form"
+            id="loan-form"
+            action="https://formsubmit.co/vvltdpvt@gmail.com"
+            method="POST"
+            enctype="multipart/form-data"
+            hidden
+          >
+            <div class="form-header">
+              <div>
+                <p class="eyebrow">Application form</p>
+                <h2>Loan details and document upload</h2>
+                <p>Your data and document will be emailed to <strong>vvltdpvt@gmail.com</strong>.</p>
+              </div>
+              <div class="limit-badge">Max file: 10 MB</div>
             </div>
-          </dl>
-        </div>
-        <div class="hero-media" aria-label="Customer consulting with loan advisor">
-          <img
-            src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80"
-            alt="Loan advisor reviewing documents with a customer"
-          />
-        </div>
-      </section>
 
-      <section id="loans" class="section">
-        <div class="section-heading">
-          <p class="eyebrow">Loan options</p>
-          <h2>Support for common funding needs</h2>
-        </div>
-        <div class="loan-grid">
-          <article>
-            <span>01</span>
-            <h3>Personal Loan</h3>
-            <p>For medical needs, education, family expenses, travel, or debt consolidation.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Business Loan</h3>
-            <p>For working capital, equipment purchase, expansion, stock, and shop improvements.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>Home Loan</h3>
-            <p>For new home purchase, construction, renovation, and balance transfer enquiry.</p>
-          </article>
-          <article>
-            <span>04</span>
-            <h3>Vehicle Loan</h3>
-            <p>For two-wheeler, car, commercial vehicle, used vehicle, and refinance needs.</p>
-          </article>
-          <article>
-            <span>05</span>
-            <h3>Mortgage Loan</h3>
-            <p>For loan against property with basic property and ownership document review.</p>
-          </article>
-          <article>
-            <span>06</span>
-            <h3>Gold Loan</h3>
-            <p>For short-term funding needs backed by gold valuation and KYC verification.</p>
-          </article>
-        </div>
-      </section>
+            <input type="hidden" name="_subject" value="New Varsha Venture loan enquiry" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_next" value="" />
+            <input type="hidden" name="Logged in user email" id="logged-user-email" value="" />
+            <input type="hidden" name="Submitted from website at" id="submitted-at" value="" />
 
-      <section id="requirements" class="section requirements">
-        <div class="section-heading">
-          <p class="eyebrow">Before applying</p>
-          <h2>Basic loan requirements</h2>
-        </div>
-        <div class="requirement-layout">
-          <div class="requirement-panel">
-            <h3>Applicant details</h3>
-            <ul>
-              <li>Full name, mobile number, email, city, and complete address.</li>
-              <li>Age 21 years or above, with stable income source.</li>
-              <li>PAN number and Aadhaar number or Aadhaar last four digits.</li>
-              <li>Employment type, monthly income, loan amount, and tenure preference.</li>
-            </ul>
-          </div>
-          <div class="requirement-panel">
-            <h3>Documents to upload</h3>
-            <ul>
-              <li>PAN card and Aadhaar card or other valid identity proof.</li>
-              <li>Latest salary slips, bank statement, or business income proof.</li>
-              <li>Address proof such as Aadhaar, voter ID, rent agreement, or utility bill.</li>
-              <li>Property, vehicle, or collateral documents when applying for secured loans.</li>
-            </ul>
-          </div>
-          <div class="terms-box">
-            <h3>Important terms</h3>
-            <p>
-              Loan approval, interest rate, processing fee, EMI, tenure, and final eligibility depend on lender policy, credit profile, document verification, income proof, and repayment capacity.
-            </p>
-            <p>
-              Submitting this form is only an enquiry. Do not upload passwords, OTPs, or sensitive bank login details.
-            </p>
-          </div>
-        </div>
-      </section>
+            <div class="form-grid">
+              <label>
+                Full name
+                <input name="Full name" type="text" autocomplete="name" required />
+              </label>
+              <label>
+                Mobile number
+                <input name="Mobile number" type="tel" autocomplete="tel" pattern="[0-9+\-\s]{10,15}" required />
+              </label>
+              <label>
+                Email address
+                <input name="Email address" type="email" autocomplete="email" required />
+              </label>
+              <label>
+                City
+                <input name="City" type="text" autocomplete="address-level2" required />
+              </label>
+              <label>
+                Date of birth
+                <input name="Date of birth" type="date" required />
+              </label>
+              <label>
+                Gender
+                <select name="Gender" required>
+                  <option value="">Select gender</option>
+                  <option>Female</option>
+                  <option>Male</option>
+                  <option>Other</option>
+                  <option>Prefer not to say</option>
+                </select>
+              </label>
+              <label>
+                Marital status
+                <select name="Marital status" required>
+                  <option value="">Select status</option>
+                  <option>Single</option>
+                  <option>Married</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label>
+                Loan type
+                <select name="Loan type" required>
+                  <option value="">Select loan type</option>
+                  <option>Personal loan</option>
+                  <option>Business loan</option>
+                  <option>Home loan</option>
+                  <option>Vehicle loan</option>
+                  <option>Mortgage loan</option>
+                  <option>Gold loan</option>
+                </select>
+              </label>
+              <label>
+                Required loan amount
+                <input name="Required loan amount" type="number" min="10000" step="1000" placeholder="Example: 500000" required />
+              </label>
+              <label>
+                Preferred tenure
+                <select name="Preferred tenure" required>
+                  <option value="">Select tenure</option>
+                  <option>6 to 12 months</option>
+                  <option>1 to 3 years</option>
+                  <option>3 to 5 years</option>
+                  <option>5 to 10 years</option>
+                  <option>10 years or above</option>
+                </select>
+              </label>
+              <label>
+                Employment type
+                <select name="Employment type" required>
+                  <option value="">Select employment</option>
+                  <option>Salaried</option>
+                  <option>Self-employed</option>
+                  <option>Business owner</option>
+                  <option>Farmer</option>
+                  <option>Pensioner</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label>
+                Monthly income
+                <input name="Monthly income" type="number" min="0" step="1000" placeholder="Example: 45000" required />
+              </label>
+              <label>
+                Existing monthly EMI
+                <input name="Existing monthly EMI" type="number" min="0" step="1000" placeholder="Example: 8000" required />
+              </label>
+              <label>
+                Credit score range
+                <select name="Credit score range" required>
+                  <option value="">Select range</option>
+                  <option>750 and above</option>
+                  <option>700 to 749</option>
+                  <option>650 to 699</option>
+                  <option>Below 650</option>
+                  <option>Not sure</option>
+                </select>
+              </label>
+              <label>
+                Company or business name
+                <input name="Company or business name" type="text" required />
+              </label>
+              <label>
+                Work or business experience
+                <select name="Work or business experience" required>
+                  <option value="">Select experience</option>
+                  <option>Less than 1 year</option>
+                  <option>1 to 2 years</option>
+                  <option>2 to 5 years</option>
+                  <option>5 years or above</option>
+                </select>
+              </label>
+              <label>
+                PAN number
+                <input name="PAN number" type="text" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" placeholder="ABCDE1234F" required />
+              </label>
+              <label>
+                Aadhaar last 4 digits
+                <input name="Aadhaar last 4 digits" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required />
+              </label>
+              <label>
+                Collateral available
+                <select name="Collateral available" required>
+                  <option value="">Select option</option>
+                  <option>Yes</option>
+                  <option>No</option>
+                  <option>Not sure</option>
+                </select>
+              </label>
+              <label>
+                Property or vehicle details
+                <input name="Property or vehicle details" type="text" placeholder="Optional if not applicable" />
+              </label>
+              <label>
+                Preferred contact time
+                <select name="Preferred contact time" required>
+                  <option value="">Select time</option>
+                  <option>Morning</option>
+                  <option>Afternoon</option>
+                  <option>Evening</option>
+                </select>
+              </label>
+              <label>
+                Document type uploaded
+                <select name="Document type uploaded" required>
+                  <option value="">Select document</option>
+                  <option>PAN card</option>
+                  <option>Aadhaar card</option>
+                  <option>Bank statement</option>
+                  <option>Salary slip</option>
+                  <option>Business proof</option>
+                  <option>Property document</option>
+                  <option>Combined loan document</option>
+                </select>
+              </label>
+            </div>
 
-      <section id="login" class="section login-section">
-        <div class="section-heading">
-          <p class="eyebrow">Secure entry</p>
-          <h2>Login before sending a loan query</h2>
-          <p>
-            Customers can login with basic contact details and submit only loan enquiries. Admin access is reserved for <strong>vvltdpvt@gmail.com</strong>.
-          </p>
-        </div>
-        <div class="login-grid">
-          <form class="login-card" id="user-login-form">
-            <h3>User login</h3>
-            <p>Login once, then send your loan query and documents.</p>
-            <label>
-              Full name
-              <input id="login-name" type="text" autocomplete="name" required />
+            <label class="wide">
+              Complete address
+              <textarea name="Complete address" rows="3" required></textarea>
             </label>
-            <label>
-              Email address
-              <input id="login-email" type="email" autocomplete="email" required />
+            <label class="wide">
+              Loan purpose
+              <textarea name="Loan purpose" rows="4" placeholder="Tell us why you need the loan and any important background." required></textarea>
             </label>
-            <label>
-              Mobile number
-              <input id="login-mobile" type="tel" autocomplete="tel" pattern="[0-9+\-\s]{10,15}" required />
+            <label class="wide">
+              Additional loan information
+              <textarea name="Additional loan information" rows="4" placeholder="Mention bank preference, co-applicant details, collateral value, repayment plan, or any special note."></textarea>
             </label>
-            <button class="submit-button" type="submit">Login as user</button>
-            <p class="status-text" id="user-status">No user logged in.</p>
+            <label class="wide file-field">
+              Upload document up to 10 MB
+              <input id="loan-document" name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required />
+              <span id="file-help">Accepted: PDF, JPG, PNG, DOC, DOCX. Upload one clear document or combined file up to 10 MB.</span>
+            </label>
+
+            <label class="consent">
+              <input name="Consent" type="checkbox" value="Applicant agreed to be contacted" required />
+              <span>I confirm the information is correct and allow Varsha Venture to contact me about this loan enquiry.</span>
+            </label>
+
+            <div class="form-actions">
+              <button class="button secondary" type="button" id="logout-user">Logout user</button>
+              <button class="submit-button" type="submit">Send loan enquiry</button>
+            </div>
           </form>
+        </section>
 
-          <form class="login-card admin-card" id="admin-login-form">
-            <h3>Admin login</h3>
-            <p>Only the registered admin email can open this panel.</p>
-            <label>
-              Admin email
-              <input id="admin-email" type="email" value="vvltdpvt@gmail.com" autocomplete="username" required />
-            </label>
-            <label>
-              Admin password
-              <input id="admin-password" type="password" autocomplete="current-password" required />
-            </label>
-            <button class="submit-button" type="submit">Open admin panel</button>
-            <div class="admin-dashboard" id="admin-dashboard" hidden>
-              <h4>Admin panel</h4>
-              <p>Receiving email: <strong>vvltdpvt@gmail.com</strong></p>
-              <p>Saved enquiries on this browser: <strong id="query-count">0</strong></p>
-              <p>Document limit: <strong>10 MB per upload</strong></p>
+        <section class="view" id="view-admin-login" data-title="Admin login">
+          <div class="center-panel">
+            <form class="portal-card auth-card" id="admin-login-form">
+              <p class="eyebrow">Administrator</p>
+              <h2>Admin login</h2>
+              <p>Use the registered admin email and password to open the dashboard.</p>
+              <label>
+                Admin email
+                <input id="admin-email" type="email" value="vvltdpvt@gmail.com" autocomplete="username" required />
+              </label>
+              <label>
+                Admin password
+                <input id="admin-password" type="password" autocomplete="current-password" required />
+              </label>
+              <button class="submit-button" type="submit">Open dashboard</button>
+              <p class="status-text" id="admin-status">Admin dashboard locked.</p>
+            </form>
+          </div>
+        </section>
+
+        <section class="view" id="view-admin-dashboard" data-title="Admin dashboard">
+          <div class="dashboard-layout">
+            <div class="metric-card">
+              <span>Total enquiries</span>
+              <strong id="metric-total">0</strong>
             </div>
-            <p class="status-text" id="admin-status">Admin panel locked.</p>
-          </form>
-        </div>
-      </section>
-
-      <section id="apply" class="section apply-section">
-        <div class="form-intro">
-          <p class="eyebrow">Application form</p>
-          <h2>Send loan requirement to Varsha Venture</h2>
-          <p>
-            Fill the details carefully after user login. Your enquiry and uploaded document will be sent to <strong>vvltdpvt@gmail.com</strong>.
-          </p>
-          <div class="login-reminder" id="login-reminder">Please login as a user before submitting the loan query.</div>
-        </div>
-
-        <form
-          class="loan-form"
-          id="loan-form"
-          action="https://formsubmit.co/vvltdpvt@gmail.com"
-          method="POST"
-          enctype="multipart/form-data"
-        >
-          <input type="hidden" name="_subject" value="New Varsha Venture loan enquiry" />
-          <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_next" value="" />
-          <input type="hidden" name="Logged in user email" id="logged-user-email" value="" />
-          <input type="hidden" name="Submitted from website at" id="submitted-at" value="" />
-
-          <div class="form-grid">
-            <label>
-              Full name
-              <input name="Full name" type="text" autocomplete="name" required />
-            </label>
-            <label>
-              Mobile number
-              <input name="Mobile number" type="tel" autocomplete="tel" pattern="[0-9+\-\s]{10,15}" required />
-            </label>
-            <label>
-              Email address
-              <input name="Email address" type="email" autocomplete="email" required />
-            </label>
-            <label>
-              City
-              <input name="City" type="text" autocomplete="address-level2" required />
-            </label>
-            <label>
-              Date of birth
-              <input name="Date of birth" type="date" required />
-            </label>
-            <label>
-              Gender
-              <select name="Gender" required>
-                <option value="">Select gender</option>
-                <option>Female</option>
-                <option>Male</option>
-                <option>Other</option>
-                <option>Prefer not to say</option>
-              </select>
-            </label>
-            <label>
-              Marital status
-              <select name="Marital status" required>
-                <option value="">Select status</option>
-                <option>Single</option>
-                <option>Married</option>
-                <option>Other</option>
-              </select>
-            </label>
-            <label>
-              Loan type
-              <select name="Loan type" required>
-                <option value="">Select loan type</option>
-                <option>Personal loan</option>
-                <option>Business loan</option>
-                <option>Home loan</option>
-                <option>Vehicle loan</option>
-                <option>Mortgage loan</option>
-                <option>Gold loan</option>
-              </select>
-            </label>
-            <label>
-              Required loan amount
-              <input name="Required loan amount" type="number" min="10000" step="1000" placeholder="Example: 500000" required />
-            </label>
-            <label>
-              Preferred tenure
-              <select name="Preferred tenure" required>
-                <option value="">Select tenure</option>
-                <option>6 to 12 months</option>
-                <option>1 to 3 years</option>
-                <option>3 to 5 years</option>
-                <option>5 to 10 years</option>
-                <option>10 years or above</option>
-              </select>
-            </label>
-            <label>
-              Employment type
-              <select name="Employment type" required>
-                <option value="">Select employment</option>
-                <option>Salaried</option>
-                <option>Self-employed</option>
-                <option>Business owner</option>
-                <option>Farmer</option>
-                <option>Pensioner</option>
-                <option>Other</option>
-              </select>
-            </label>
-            <label>
-              Monthly income
-              <input name="Monthly income" type="number" min="0" step="1000" placeholder="Example: 45000" required />
-            </label>
-            <label>
-              Existing monthly EMI
-              <input name="Existing monthly EMI" type="number" min="0" step="1000" placeholder="Example: 8000" required />
-            </label>
-            <label>
-              Credit score range
-              <select name="Credit score range" required>
-                <option value="">Select range</option>
-                <option>750 and above</option>
-                <option>700 to 749</option>
-                <option>650 to 699</option>
-                <option>Below 650</option>
-                <option>Not sure</option>
-              </select>
-            </label>
-            <label>
-              Company or business name
-              <input name="Company or business name" type="text" required />
-            </label>
-            <label>
-              Work or business experience
-              <select name="Work or business experience" required>
-                <option value="">Select experience</option>
-                <option>Less than 1 year</option>
-                <option>1 to 2 years</option>
-                <option>2 to 5 years</option>
-                <option>5 years or above</option>
-              </select>
-            </label>
-            <label>
-              PAN number
-              <input name="PAN number" type="text" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" placeholder="ABCDE1234F" required />
-            </label>
-            <label>
-              Aadhaar last 4 digits
-              <input name="Aadhaar last 4 digits" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required />
-            </label>
-            <label>
-              Collateral available
-              <select name="Collateral available" required>
-                <option value="">Select option</option>
-                <option>Yes</option>
-                <option>No</option>
-                <option>Not sure</option>
-              </select>
-            </label>
-            <label>
-              Property or vehicle details
-              <input name="Property or vehicle details" type="text" placeholder="Optional if not applicable" />
-            </label>
-            <label>
-              Preferred contact time
-              <select name="Preferred contact time" required>
-                <option value="">Select time</option>
-                <option>Morning</option>
-                <option>Afternoon</option>
-                <option>Evening</option>
-              </select>
-            </label>
-            <label>
-              Document type uploaded
-              <select name="Document type uploaded" required>
-                <option value="">Select document</option>
-                <option>PAN card</option>
-                <option>Aadhaar card</option>
-                <option>Bank statement</option>
-                <option>Salary slip</option>
-                <option>Business proof</option>
-                <option>Property document</option>
-                <option>Combined loan document</option>
-              </select>
-            </label>
+            <div class="metric-card">
+              <span>Latest amount</span>
+              <strong id="metric-amount">-</strong>
+            </div>
+            <div class="metric-card">
+              <span>Receiving email</span>
+              <strong>vvltdpvt@gmail.com</strong>
+            </div>
           </div>
 
-          <label class="wide">
-            Complete address
-            <textarea name="Complete address" rows="3" required></textarea>
-          </label>
-          <label class="wide">
-            Loan purpose
-            <textarea name="Loan purpose" rows="4" placeholder="Tell us why you need the loan and any important background." required></textarea>
-          </label>
-          <label class="wide">
-            Additional loan information
-            <textarea name="Additional loan information" rows="4" placeholder="Mention bank preference, co-applicant details, collateral value, repayment plan, or any special note."></textarea>
-          </label>
-          <label class="wide file-field">
-            Upload document up to 10 MB
-            <input id="loan-document" name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required />
-            <span id="file-help">Accepted: PDF, JPG, PNG, DOC, DOCX. Upload one clear document or combined file up to 10 MB.</span>
-          </label>
+          <div class="portal-card dashboard-card">
+            <div class="dashboard-header">
+              <div>
+                <p class="eyebrow">Client queries</p>
+                <h2>Submitted loan enquiries</h2>
+              </div>
+              <div class="dashboard-actions">
+                <button class="button secondary" type="button" id="clear-dashboard">Clear local records</button>
+                <button class="button primary" type="button" id="logout-admin">Logout admin</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Loan</th>
+                    <th>Amount</th>
+                    <th>Contact</th>
+                    <th>Document</th>
+                    <th>Submitted</th>
+                  </tr>
+                </thead>
+                <tbody id="query-table">
+                  <tr>
+                    <td colspan="6">No enquiries saved on this browser yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="dashboard-note">
+              This static dashboard shows enquiries saved in this browser before they are emailed. A shared dashboard for every client device requires a database-backed deployment.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
 
-          <label class="consent">
-            <input name="Consent" type="checkbox" value="Applicant agreed to be contacted" required />
-            <span>I confirm the information is correct and allow Varsha Venture to contact me about this loan enquiry.</span>
-          </label>
-
-          <button class="submit-button" type="submit">Send loan enquiry</button>
-        </form>
-      </section>
-    </main>
-
-    <footer>
-      <p>Varsha Venture Loan Support</p>
-      <a href="mailto:vvltdpvt@gmail.com">vvltdpvt@gmail.com</a>
-    </footer>
     <script>
       const ADMIN_EMAIL = 'vvltdpvt@gmail.com';
       const ADMIN_PASSWORD = 'VVLoan@2026';
       const MAX_FILE_SIZE = 10 * 1024 * 1024;
-      const nextInput = document.querySelector('input[name="_next"]');
+      const views = document.querySelectorAll('.view');
+      const viewTitle = document.querySelector('#view-title');
+      const navItems = document.querySelectorAll('[data-view-link]');
+      const sessionPill = document.querySelector('#session-pill');
       const userForm = document.querySelector('#user-login-form');
       const adminForm = document.querySelector('#admin-login-form');
       const loanForm = document.querySelector('#loan-form');
+      const lockedMessage = document.querySelector('#locked-message');
       const userStatus = document.querySelector('#user-status');
       const adminStatus = document.querySelector('#admin-status');
-      const loginReminder = document.querySelector('#login-reminder');
-      const adminDashboard = document.querySelector('#admin-dashboard');
-      const queryCount = document.querySelector('#query-count');
       const loggedUserEmail = document.querySelector('#logged-user-email');
       const submittedAt = document.querySelector('#submitted-at');
       const fileInput = document.querySelector('#loan-document');
       const fileHelp = document.querySelector('#file-help');
+      const queryTable = document.querySelector('#query-table');
+      const metricTotal = document.querySelector('#metric-total');
+      const metricAmount = document.querySelector('#metric-amount');
 
       const getUser = () => JSON.parse(localStorage.getItem('vvUser') || 'null');
-      const setQueryCount = () => {
-        if (queryCount) {
-          queryCount.textContent = localStorage.getItem('vvQueryCount') || '0';
+      const getAdmin = () => localStorage.getItem('vvAdmin') === 'true';
+      const getQueries = () => JSON.parse(localStorage.getItem('vvQueries') || '[]');
+      const saveQueries = (queries) => localStorage.setItem('vvQueries', JSON.stringify(queries));
+
+      const showView = (name) => {
+        if (name === 'loan-form' && !getUser()) {
+          name = 'user-login';
+          userStatus.textContent = 'Login first, then upload loan details.';
         }
+        if (name === 'admin-dashboard' && !getAdmin()) {
+          name = 'admin-login';
+          adminStatus.textContent = 'Admin login required before opening the dashboard.';
+        }
+        views.forEach((view) => view.classList.toggle('active', view.id === `view-${name}`));
+        navItems.forEach((item) => item.classList.toggle('active', item.dataset.viewLink === name));
+        const activeView = document.querySelector(`#view-${name}`);
+        viewTitle.textContent = activeView?.dataset.title || 'Varsha Venture';
+        renderDashboard();
       };
-      const refreshUserState = () => {
+
+      const refreshSession = () => {
         const user = getUser();
-        if (nextInput) {
-          nextInput.value = new URL('thanks.html', window.location.href).href;
-        }
+        const admin = getAdmin();
+        document.querySelectorAll('.admin-only').forEach((item) => {
+          item.hidden = !admin;
+        });
         if (user) {
-          userStatus.textContent = `Logged in as ${user.name} (${user.email}).`;
-          loginReminder.textContent = `Logged in as ${user.name}. You can now submit the loan query.`;
+          sessionPill.textContent = `User: ${user.name}`;
           loggedUserEmail.value = user.email;
-          loanForm.classList.remove('locked-form');
+          lockedMessage.hidden = true;
+          loanForm.hidden = false;
+          userStatus.textContent = `Logged in as ${user.name} (${user.email}).`;
+          document.querySelector('input[name="Full name"]').value = user.name;
+          document.querySelector('input[name="Email address"]').value = user.email;
+          document.querySelector('input[name="Mobile number"]').value = user.mobile;
         } else {
-          userStatus.textContent = 'No user logged in.';
-          loginReminder.textContent = 'Please login as a user before submitting the loan query.';
+          sessionPill.textContent = admin ? 'Admin session' : 'Guest session';
           loggedUserEmail.value = '';
-          loanForm.classList.add('locked-form');
+          lockedMessage.hidden = false;
+          loanForm.hidden = true;
+          userStatus.textContent = 'No user logged in.';
         }
       };
+
+      const collectLoanSummary = () => {
+        const formData = new FormData(loanForm);
+        const file = fileInput.files[0];
+        return {
+          name: formData.get('Full name') || '',
+          email: formData.get('Email address') || '',
+          mobile: formData.get('Mobile number') || '',
+          city: formData.get('City') || '',
+          loanType: formData.get('Loan type') || '',
+          amount: formData.get('Required loan amount') || '',
+          income: formData.get('Monthly income') || '',
+          documentType: formData.get('Document type uploaded') || '',
+          fileName: file ? file.name : 'No file',
+          submittedAt: new Date().toLocaleString(),
+        };
+      };
+
+      const renderDashboard = () => {
+        const queries = getQueries();
+        metricTotal.textContent = queries.length;
+        metricAmount.textContent = queries[0]?.amount ? `Rs. ${queries[0].amount}` : '-';
+        if (!queries.length) {
+          queryTable.innerHTML = '<tr><td colspan="6">No enquiries saved on this browser yet.</td></tr>';
+          return;
+        }
+        queryTable.innerHTML = queries
+          .map(
+            (query) => `
+              <tr>
+                <td><strong>${query.name}</strong><span>${query.city}</span></td>
+                <td>${query.loanType}</td>
+                <td>Rs. ${query.amount}</td>
+                <td><span>${query.mobile}</span><span>${query.email}</span></td>
+                <td><span>${query.documentType}</span><span>${query.fileName}</span></td>
+                <td>${query.submittedAt}</td>
+              </tr>
+            `
+          )
+          .join('');
+      };
+
+      navItems.forEach((item) => {
+        item.addEventListener('click', (event) => {
+          event.preventDefault();
+          showView(item.dataset.viewLink);
+        });
+      });
 
       userForm.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -452,11 +554,8 @@
           mobile: document.querySelector('#login-mobile').value.trim(),
         };
         localStorage.setItem('vvUser', JSON.stringify(user));
-        document.querySelector('input[name="Full name"]').value = user.name;
-        document.querySelector('input[name="Email address"]').value = user.email;
-        document.querySelector('input[name="Mobile number"]').value = user.mobile;
-        refreshUserState();
-        document.querySelector('#apply').scrollIntoView({ behavior: 'smooth' });
+        refreshSession();
+        showView('loan-form');
       });
 
       adminForm.addEventListener('submit', (event) => {
@@ -464,11 +563,11 @@
         const email = document.querySelector('#admin-email').value.trim().toLowerCase();
         const password = document.querySelector('#admin-password').value;
         if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-          adminDashboard.hidden = false;
-          adminStatus.textContent = 'Admin panel opened.';
-          setQueryCount();
+          localStorage.setItem('vvAdmin', 'true');
+          adminStatus.textContent = 'Admin verified. Opening dashboard.';
+          refreshSession();
+          showView('admin-dashboard');
         } else {
-          adminDashboard.hidden = true;
           adminStatus.textContent = 'Invalid admin email or password.';
         }
       });
@@ -491,8 +590,7 @@
         const file = fileInput.files[0];
         if (!user) {
           event.preventDefault();
-          loginReminder.textContent = 'Login as a user first, then submit the loan query.';
-          document.querySelector('#login').scrollIntoView({ behavior: 'smooth' });
+          showView('user-login');
           return;
         }
         if (file && file.size > MAX_FILE_SIZE) {
@@ -503,13 +601,34 @@
           return;
         }
         submittedAt.value = new Date().toLocaleString();
-        const count = Number(localStorage.getItem('vvQueryCount') || '0') + 1;
-        localStorage.setItem('vvQueryCount', String(count));
-        setQueryCount();
+        document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;
+        const queries = getQueries();
+        queries.unshift(collectLoanSummary());
+        saveQueries(queries.slice(0, 50));
+        renderDashboard();
       });
 
-      setQueryCount();
-      refreshUserState();
+      document.querySelector('#logout-user').addEventListener('click', () => {
+        localStorage.removeItem('vvUser');
+        loanForm.reset();
+        refreshSession();
+        showView('user-login');
+      });
+
+      document.querySelector('#logout-admin').addEventListener('click', () => {
+        localStorage.removeItem('vvAdmin');
+        refreshSession();
+        showView('admin-login');
+      });
+
+      document.querySelector('#clear-dashboard').addEventListener('click', () => {
+        saveQueries([]);
+        renderDashboard();
+      });
+
+      document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;
+      refreshSession();
+      renderDashboard();
     </script>
   </body>
 </html>
