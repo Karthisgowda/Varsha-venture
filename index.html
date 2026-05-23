@@ -267,7 +267,7 @@
     <script>
       const nextInput = document.querySelector('input[name="_next"]');
       if (nextInput) {
-        nextInput.value = `${window.location.origin}/thanks.html`;
+        nextInput.value = new URL('thanks.html', window.location.href).href;
       }
     </script>
   </body>
