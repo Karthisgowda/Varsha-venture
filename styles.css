@@ -45,7 +45,8 @@ textarea {
 .app-shell {
   display: grid;
   grid-template-columns: 292px minmax(0, 1fr);
-  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -380,6 +381,43 @@ td span {
   gap: 16px;
 }
 
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.step-pill {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--muted);
+  background: #fff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.step-pill.active {
+  border-color: rgba(11, 122, 117, 0.35);
+  color: var(--accent-strong);
+  background: #e9f4f2;
+}
+
+.step-pill.done {
+  color: var(--navy);
+  background: #f8fafc;
+}
+
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+}
+
 label {
   display: grid;
   gap: 8px;
@@ -557,25 +595,41 @@ td span {
 
 @media (max-width: 980px) {
   body {
-    overflow: auto;
+    overflow: hidden;
   }
 
   .app-shell {
+    grid-template-rows: auto minmax(0, 1fr);
     grid-template-columns: 1fr;
-    height: auto;
-    min-height: 100vh;
+    height: 100dvh;
+    min-height: 0;
   }
 
   .sidebar {
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto;
+    gap: 14px;
+    padding: 16px 18px;
   }
 
   .side-nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .nav-item {
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .sidebar-card {
+    display: none;
   }
 
   .workspace {
-    min-height: 100vh;
+    min-height: 0;
   }
 
   .topbar,
@@ -602,19 +656,73 @@ td span {
     padding: 18px;
   }
 
-  .side-nav,
+  .sidebar {
+    gap: 12px;
+  }
+
+  .side-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .nav-item {
+    width: 100%;
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+  .topbar {
+    gap: 10px;
+  }
+
+  .view {
+    overflow: hidden;
+  }
+
   .quick-stats,
   .loan-grid,
+  .stepper,
   .form-grid {
     grid-template-columns: 1fr;
   }
 
   h2 {
-    font-size: 32px;
+    font-size: 28px;
+  }
+
+  .lead {
+    font-size: 15px;
+    line-height: 1.5;
   }
 
   .hero-media img {
     min-height: 260px;
+  }
+
+  #view-home .hero-media,
+  #view-home .loan-grid {
+    display: none;
+  }
+
+  #view-home .view-grid {
+    display: block;
+  }
+
+  #view-home .quick-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #view-home .quick-stats div {
+    padding: 12px;
+  }
+
+  #view-home .quick-stats dt {
+    font-size: 19px;
+  }
+
+  #view-home .hero-actions {
+    margin: 18px 0;
   }
 
   .hero-actions .button,

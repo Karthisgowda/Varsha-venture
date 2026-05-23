@@ -170,189 +170,207 @@
             <input type="hidden" name="Logged in user email" id="logged-user-email" value="" />
             <input type="hidden" name="Submitted from website at" id="submitted-at" value="" />
 
-            <div class="form-grid">
-              <label>
-                Full name
-                <input name="Full name" type="text" autocomplete="name" required />
+            <div class="stepper" aria-label="Application steps">
+              <button class="step-pill active" type="button" data-step-jump="0">1. Applicant</button>
+              <button class="step-pill" type="button" data-step-jump="1">2. Loan</button>
+              <button class="step-pill" type="button" data-step-jump="2">3. Upload</button>
+            </div>
+
+            <div class="form-step active" data-step="0">
+              <div class="form-grid">
+                <label>
+                  Full name
+                  <input name="Full name" type="text" autocomplete="name" required />
+                </label>
+                <label>
+                  Mobile number
+                  <input name="Mobile number" type="tel" autocomplete="tel" pattern="[0-9+\-\s]{10,15}" required />
+                </label>
+                <label>
+                  Email address
+                  <input name="Email address" type="email" autocomplete="email" required />
+                </label>
+                <label>
+                  City
+                  <input name="City" type="text" autocomplete="address-level2" required />
+                </label>
+                <label>
+                  Date of birth
+                  <input name="Date of birth" type="date" required />
+                </label>
+                <label>
+                  Gender
+                  <select name="Gender" required>
+                    <option value="">Select gender</option>
+                    <option>Female</option>
+                    <option>Male</option>
+                    <option>Other</option>
+                    <option>Prefer not to say</option>
+                  </select>
+                </label>
+                <label>
+                  Marital status
+                  <select name="Marital status" required>
+                    <option value="">Select status</option>
+                    <option>Single</option>
+                    <option>Married</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label>
+                  Complete address
+                  <textarea name="Complete address" rows="2" required></textarea>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-step" data-step="1">
+              <div class="form-grid">
+                <label>
+                  Loan type
+                  <select name="Loan type" required>
+                    <option value="">Select loan type</option>
+                    <option>Personal loan</option>
+                    <option>Business loan</option>
+                    <option>Home loan</option>
+                    <option>Vehicle loan</option>
+                    <option>Mortgage loan</option>
+                    <option>Gold loan</option>
+                  </select>
+                </label>
+                <label>
+                  Required loan amount
+                  <input name="Required loan amount" type="number" min="10000" step="1000" placeholder="Example: 500000" required />
+                </label>
+                <label>
+                  Preferred tenure
+                  <select name="Preferred tenure" required>
+                    <option value="">Select tenure</option>
+                    <option>6 to 12 months</option>
+                    <option>1 to 3 years</option>
+                    <option>3 to 5 years</option>
+                    <option>5 to 10 years</option>
+                    <option>10 years or above</option>
+                  </select>
+                </label>
+                <label>
+                  Employment type
+                  <select name="Employment type" required>
+                    <option value="">Select employment</option>
+                    <option>Salaried</option>
+                    <option>Self-employed</option>
+                    <option>Business owner</option>
+                    <option>Farmer</option>
+                    <option>Pensioner</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label>
+                  Monthly income
+                  <input name="Monthly income" type="number" min="0" step="1000" placeholder="Example: 45000" required />
+                </label>
+                <label>
+                  Existing monthly EMI
+                  <input name="Existing monthly EMI" type="number" min="0" step="1000" placeholder="Example: 8000" required />
+                </label>
+                <label>
+                  Credit score range
+                  <select name="Credit score range" required>
+                    <option value="">Select range</option>
+                    <option>750 and above</option>
+                    <option>700 to 749</option>
+                    <option>650 to 699</option>
+                    <option>Below 650</option>
+                    <option>Not sure</option>
+                  </select>
+                </label>
+                <label>
+                  Company or business name
+                  <input name="Company or business name" type="text" required />
+                </label>
+                <label>
+                  Work or business experience
+                  <select name="Work or business experience" required>
+                    <option value="">Select experience</option>
+                    <option>Less than 1 year</option>
+                    <option>1 to 2 years</option>
+                    <option>2 to 5 years</option>
+                    <option>5 years or above</option>
+                  </select>
+                </label>
+                <label>
+                  Collateral available
+                  <select name="Collateral available" required>
+                    <option value="">Select option</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                    <option>Not sure</option>
+                  </select>
+                </label>
+                <label>
+                  Property or vehicle details
+                  <input name="Property or vehicle details" type="text" placeholder="Optional if not applicable" />
+                </label>
+                <label>
+                  Loan purpose
+                  <textarea name="Loan purpose" rows="2" placeholder="Tell us why you need the loan." required></textarea>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-step" data-step="2">
+              <div class="form-grid">
+                <label>
+                  PAN number
+                  <input name="PAN number" type="text" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" placeholder="ABCDE1234F" required />
+                </label>
+                <label>
+                  Aadhaar last 4 digits
+                  <input name="Aadhaar last 4 digits" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required />
+                </label>
+                <label>
+                  Preferred contact time
+                  <select name="Preferred contact time" required>
+                    <option value="">Select time</option>
+                    <option>Morning</option>
+                    <option>Afternoon</option>
+                    <option>Evening</option>
+                  </select>
+                </label>
+                <label>
+                  Document type uploaded
+                  <select name="Document type uploaded" required>
+                    <option value="">Select document</option>
+                    <option>PAN card</option>
+                    <option>Aadhaar card</option>
+                    <option>Bank statement</option>
+                    <option>Salary slip</option>
+                    <option>Business proof</option>
+                    <option>Property document</option>
+                    <option>Combined loan document</option>
+                  </select>
+                </label>
+              </div>
+              <label class="wide">
+                Additional loan information
+                <textarea name="Additional loan information" rows="3" placeholder="Mention bank preference, co-applicant details, collateral value, repayment plan, or any special note."></textarea>
               </label>
-              <label>
-                Mobile number
-                <input name="Mobile number" type="tel" autocomplete="tel" pattern="[0-9+\-\s]{10,15}" required />
+              <label class="wide file-field">
+                Upload document up to 10 MB
+                <input id="loan-document" name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required />
+                <span id="file-help">Accepted: PDF, JPG, PNG, DOC, DOCX. Upload one clear document or combined file up to 10 MB.</span>
               </label>
-              <label>
-                Email address
-                <input name="Email address" type="email" autocomplete="email" required />
-              </label>
-              <label>
-                City
-                <input name="City" type="text" autocomplete="address-level2" required />
-              </label>
-              <label>
-                Date of birth
-                <input name="Date of birth" type="date" required />
-              </label>
-              <label>
-                Gender
-                <select name="Gender" required>
-                  <option value="">Select gender</option>
-                  <option>Female</option>
-                  <option>Male</option>
-                  <option>Other</option>
-                  <option>Prefer not to say</option>
-                </select>
-              </label>
-              <label>
-                Marital status
-                <select name="Marital status" required>
-                  <option value="">Select status</option>
-                  <option>Single</option>
-                  <option>Married</option>
-                  <option>Other</option>
-                </select>
-              </label>
-              <label>
-                Loan type
-                <select name="Loan type" required>
-                  <option value="">Select loan type</option>
-                  <option>Personal loan</option>
-                  <option>Business loan</option>
-                  <option>Home loan</option>
-                  <option>Vehicle loan</option>
-                  <option>Mortgage loan</option>
-                  <option>Gold loan</option>
-                </select>
-              </label>
-              <label>
-                Required loan amount
-                <input name="Required loan amount" type="number" min="10000" step="1000" placeholder="Example: 500000" required />
-              </label>
-              <label>
-                Preferred tenure
-                <select name="Preferred tenure" required>
-                  <option value="">Select tenure</option>
-                  <option>6 to 12 months</option>
-                  <option>1 to 3 years</option>
-                  <option>3 to 5 years</option>
-                  <option>5 to 10 years</option>
-                  <option>10 years or above</option>
-                </select>
-              </label>
-              <label>
-                Employment type
-                <select name="Employment type" required>
-                  <option value="">Select employment</option>
-                  <option>Salaried</option>
-                  <option>Self-employed</option>
-                  <option>Business owner</option>
-                  <option>Farmer</option>
-                  <option>Pensioner</option>
-                  <option>Other</option>
-                </select>
-              </label>
-              <label>
-                Monthly income
-                <input name="Monthly income" type="number" min="0" step="1000" placeholder="Example: 45000" required />
-              </label>
-              <label>
-                Existing monthly EMI
-                <input name="Existing monthly EMI" type="number" min="0" step="1000" placeholder="Example: 8000" required />
-              </label>
-              <label>
-                Credit score range
-                <select name="Credit score range" required>
-                  <option value="">Select range</option>
-                  <option>750 and above</option>
-                  <option>700 to 749</option>
-                  <option>650 to 699</option>
-                  <option>Below 650</option>
-                  <option>Not sure</option>
-                </select>
-              </label>
-              <label>
-                Company or business name
-                <input name="Company or business name" type="text" required />
-              </label>
-              <label>
-                Work or business experience
-                <select name="Work or business experience" required>
-                  <option value="">Select experience</option>
-                  <option>Less than 1 year</option>
-                  <option>1 to 2 years</option>
-                  <option>2 to 5 years</option>
-                  <option>5 years or above</option>
-                </select>
-              </label>
-              <label>
-                PAN number
-                <input name="PAN number" type="text" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" placeholder="ABCDE1234F" required />
-              </label>
-              <label>
-                Aadhaar last 4 digits
-                <input name="Aadhaar last 4 digits" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required />
-              </label>
-              <label>
-                Collateral available
-                <select name="Collateral available" required>
-                  <option value="">Select option</option>
-                  <option>Yes</option>
-                  <option>No</option>
-                  <option>Not sure</option>
-                </select>
-              </label>
-              <label>
-                Property or vehicle details
-                <input name="Property or vehicle details" type="text" placeholder="Optional if not applicable" />
-              </label>
-              <label>
-                Preferred contact time
-                <select name="Preferred contact time" required>
-                  <option value="">Select time</option>
-                  <option>Morning</option>
-                  <option>Afternoon</option>
-                  <option>Evening</option>
-                </select>
-              </label>
-              <label>
-                Document type uploaded
-                <select name="Document type uploaded" required>
-                  <option value="">Select document</option>
-                  <option>PAN card</option>
-                  <option>Aadhaar card</option>
-                  <option>Bank statement</option>
-                  <option>Salary slip</option>
-                  <option>Business proof</option>
-                  <option>Property document</option>
-                  <option>Combined loan document</option>
-                </select>
+              <label class="consent">
+                <input name="Consent" type="checkbox" value="Applicant agreed to be contacted" required />
+                <span>I confirm the information is correct and allow Varsha Venture to contact me about this loan enquiry.</span>
               </label>
             </div>
 
-            <label class="wide">
-              Complete address
-              <textarea name="Complete address" rows="3" required></textarea>
-            </label>
-            <label class="wide">
-              Loan purpose
-              <textarea name="Loan purpose" rows="4" placeholder="Tell us why you need the loan and any important background." required></textarea>
-            </label>
-            <label class="wide">
-              Additional loan information
-              <textarea name="Additional loan information" rows="4" placeholder="Mention bank preference, co-applicant details, collateral value, repayment plan, or any special note."></textarea>
-            </label>
-            <label class="wide file-field">
-              Upload document up to 10 MB
-              <input id="loan-document" name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required />
-              <span id="file-help">Accepted: PDF, JPG, PNG, DOC, DOCX. Upload one clear document or combined file up to 10 MB.</span>
-            </label>
-
-            <label class="consent">
-              <input name="Consent" type="checkbox" value="Applicant agreed to be contacted" required />
-              <span>I confirm the information is correct and allow Varsha Venture to contact me about this loan enquiry.</span>
-            </label>
-
             <div class="form-actions">
-              <button class="button secondary" type="button" id="logout-user">Logout user</button>
-              <button class="submit-button" type="submit">Send loan enquiry</button>
+              <button class="button secondary" type="button" id="logout-user">Logout</button>
+              <button class="button secondary" type="button" id="prev-step">Back</button>
+              <button class="button primary" type="button" id="next-step">Next</button>
+              <button class="submit-button" type="submit" id="submit-loan" hidden>Send loan enquiry</button>
             </div>
           </form>
         </section>
@@ -452,6 +470,12 @@
       const queryTable = document.querySelector('#query-table');
       const metricTotal = document.querySelector('#metric-total');
       const metricAmount = document.querySelector('#metric-amount');
+      const formSteps = document.querySelectorAll('.form-step');
+      const stepPills = document.querySelectorAll('.step-pill');
+      const prevStepButton = document.querySelector('#prev-step');
+      const nextStepButton = document.querySelector('#next-step');
+      const submitLoanButton = document.querySelector('#submit-loan');
+      let currentStep = 0;
 
       const getUser = () => JSON.parse(localStorage.getItem('vvUser') || 'null');
       const getAdmin = () => localStorage.getItem('vvAdmin') === 'true';
@@ -472,6 +496,31 @@
         const activeView = document.querySelector(`#view-${name}`);
         viewTitle.textContent = activeView?.dataset.title || 'Varsha Venture';
         renderDashboard();
+      };
+
+      const showStep = (step) => {
+        currentStep = Math.max(0, Math.min(step, formSteps.length - 1));
+        formSteps.forEach((panel, index) => {
+          panel.classList.toggle('active', index === currentStep);
+        });
+        stepPills.forEach((pill, index) => {
+          pill.classList.toggle('active', index === currentStep);
+          pill.classList.toggle('done', index < currentStep);
+        });
+        prevStepButton.hidden = currentStep === 0;
+        nextStepButton.hidden = currentStep === formSteps.length - 1;
+        submitLoanButton.hidden = currentStep !== formSteps.length - 1;
+      };
+
+      const validateCurrentStep = () => {
+        const fields = [...formSteps[currentStep].querySelectorAll('input, select, textarea')];
+        for (const field of fields) {
+          if (!field.checkValidity()) {
+            field.reportValidity();
+            return false;
+          }
+        }
+        return true;
       };
 
       const refreshSession = () => {
@@ -555,6 +604,7 @@
         };
         localStorage.setItem('vvUser', JSON.stringify(user));
         refreshSession();
+        showStep(0);
         showView('loan-form');
       });
 
@@ -585,6 +635,27 @@
         }
       });
 
+      stepPills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const requestedStep = Number(pill.dataset.stepJump);
+          if (requestedStep <= currentStep) {
+            showStep(requestedStep);
+          } else if (requestedStep === currentStep + 1 && validateCurrentStep()) {
+            showStep(requestedStep);
+          }
+        });
+      });
+
+      prevStepButton.addEventListener('click', () => {
+        showStep(currentStep - 1);
+      });
+
+      nextStepButton.addEventListener('click', () => {
+        if (validateCurrentStep()) {
+          showStep(currentStep + 1);
+        }
+      });
+
       loanForm.addEventListener('submit', (event) => {
         const user = getUser();
         const file = fileInput.files[0];
@@ -611,6 +682,7 @@
       document.querySelector('#logout-user').addEventListener('click', () => {
         localStorage.removeItem('vvUser');
         loanForm.reset();
+        showStep(0);
         refreshSession();
         showView('user-login');
       });
@@ -627,6 +699,7 @@
       });
 
       document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;
+      showStep(0);
       refreshSession();
       renderDashboard();
     </script>
