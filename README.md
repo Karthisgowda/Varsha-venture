@@ -19,3 +19,7 @@ Static loan-provider portal for Varsha Venture.
 ## Email Setup Note
 
 The form uses `https://formsubmit.co/vvltdpvt@gmail.com`. On the first real submission, FormSubmit may send an activation email to `vvltdpvt@gmail.com`. Open that activation email once so future enquiries are delivered automatically.
+
+## Deployment
+
+The live site is deployed with GitHub Pages from the `main` branch.
