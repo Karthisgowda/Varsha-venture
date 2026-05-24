@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#102a43" />
     <title>Varsha Venture | Loan Portal</title>
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="styles.css?v=20260524-auth-scroll-fix" />
+    <link rel="stylesheet" href="styles.css?v=20260524-email-docs-flow" />
   </head>
   <body>
     <div class="app-shell">
@@ -168,8 +168,14 @@
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_next" value="" />
+            <input type="hidden" name="_autoresponse" value="Thank you for sending enquiry. We received your loan enquiry and we will get you back soon." />
+            <input type="hidden" name="_replyto" id="reply-to-email" value="" />
+            <input type="hidden" name="email" id="submitter-email" value="" />
             <input type="hidden" name="Logged in user email" id="logged-user-email" value="" />
             <input type="hidden" name="Submitted from website at" id="submitted-at" value="" />
+            <input type="hidden" name="Mandatory document requirement" id="document-requirement-field" value="" />
+
+            <div class="status-banner" id="user-application-status" hidden></div>
 
             <div class="stepper" aria-label="Application steps">
               <button class="step-pill active" type="button" data-step-jump="0">1. Applicant</button>
@@ -256,7 +262,7 @@
                 </label>
                 <label>
                   Employment type
-                  <select name="Employment type" required>
+                  <select name="Employment type" id="employment-type" required>
                     <option value="">Select employment</option>
                     <option>Salaried</option>
                     <option>Self-employed</option>
@@ -320,6 +326,9 @@
             </div>
 
             <div class="form-step" data-step="2">
+              <div class="requirement-callout" id="document-requirement">
+                Select employment type to see the mandatory KYC and income document checklist.
+              </div>
               <div class="form-grid">
                 <label>
                   PAN number
@@ -358,8 +367,8 @@
               </label>
               <label class="wide file-field">
                 Upload document up to 10 MB
-                <input id="loan-document" name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required />
-                <span id="file-help">Accepted: PDF, JPG, PNG, DOC, DOCX. Upload one clear document or combined file up to 10 MB.</span>
+                <input id="loan-document" name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.zip" required />
+                <span id="file-help">Accepted: PDF, JPG, PNG, DOC, DOCX, ZIP. Upload one combined file up to 10 MB.</span>
               </label>
               <label class="consent">
                 <input name="Consent" type="checkbox" value="Applicant agreed to be contacted" required />
@@ -432,12 +441,14 @@
                     <th>Amount</th>
                     <th>Contact</th>
                     <th>Document</th>
+                    <th>Status</th>
                     <th>Submitted</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody id="query-table">
                   <tr>
-                    <td colspan="6">No enquiries saved on this browser yet.</td>
+                    <td colspan="8">No enquiries saved on this browser yet.</td>
                   </tr>
                 </tbody>
               </table>
@@ -465,9 +476,15 @@
       const userStatus = document.querySelector('#user-status');
       const adminStatus = document.querySelector('#admin-status');
       const loggedUserEmail = document.querySelector('#logged-user-email');
+      const replyToEmail = document.querySelector('#reply-to-email');
+      const submitterEmail = document.querySelector('#submitter-email');
       const submittedAt = document.querySelector('#submitted-at');
       const fileInput = document.querySelector('#loan-document');
       const fileHelp = document.querySelector('#file-help');
+      const employmentType = document.querySelector('#employment-type');
+      const documentRequirement = document.querySelector('#document-requirement');
+      const documentRequirementField = document.querySelector('#document-requirement-field');
+      const userApplicationStatus = document.querySelector('#user-application-status');
       const queryTable = document.querySelector('#query-table');
       const metricTotal = document.querySelector('#metric-total');
       const metricAmount = document.querySelector('#metric-amount');
@@ -482,6 +499,15 @@
       const getAdmin = () => localStorage.getItem('vvAdmin') === 'true';
       const getQueries = () => JSON.parse(localStorage.getItem('vvQueries') || '[]');
       const saveQueries = (queries) => localStorage.setItem('vvQueries', JSON.stringify(queries));
+      const getRequirementText = (employment) => {
+        if (employment === 'Salaried') {
+          return 'Mandatory documents: KYC proof, latest 3 months salary slips, and latest 6 months bank statement.';
+        }
+        if (employment === 'Self-employed' || employment === 'Business owner') {
+          return 'Mandatory documents: KYC proof, latest 6 months bank statement, and latest 2 years ITR.';
+        }
+        return 'Mandatory documents: KYC proof plus latest income proof and latest 6 months bank statement where available.';
+      };
 
       const showView = (name) => {
         if (name === 'loan-form' && !getUser()) {
@@ -533,18 +559,24 @@
         if (user) {
           sessionPill.textContent = `User: ${user.name}`;
           loggedUserEmail.value = user.email;
+          replyToEmail.value = user.email;
+          submitterEmail.value = user.email;
           lockedMessage.hidden = true;
           loanForm.hidden = false;
           userStatus.textContent = `Logged in as ${user.name} (${user.email}).`;
           document.querySelector('input[name="Full name"]').value = user.name;
           document.querySelector('input[name="Email address"]').value = user.email;
           document.querySelector('input[name="Mobile number"]').value = user.mobile;
+          renderUserStatus();
         } else {
           sessionPill.textContent = admin ? 'Admin session' : 'Guest session';
           loggedUserEmail.value = '';
+          replyToEmail.value = '';
+          submitterEmail.value = '';
           lockedMessage.hidden = false;
           loanForm.hidden = true;
           userStatus.textContent = 'No user logged in.';
+          userApplicationStatus.hidden = true;
         }
       };
 
@@ -561,8 +593,21 @@
           income: formData.get('Monthly income') || '',
           documentType: formData.get('Document type uploaded') || '',
           fileName: file ? file.name : 'No file',
+          status: 'Submitted',
           submittedAt: new Date().toLocaleString(),
         };
+      };
+
+      const renderUserStatus = () => {
+        const user = getUser();
+        if (!user) return;
+        const latest = getQueries().find((query) => query.email === user.email);
+        if (!latest) {
+          userApplicationStatus.hidden = true;
+          return;
+        }
+        userApplicationStatus.hidden = false;
+        userApplicationStatus.textContent = `Application status: ${latest.status || 'Submitted'} for ${latest.loanType || 'loan enquiry'}.`;
       };
 
       const renderDashboard = () => {
@@ -570,19 +615,26 @@
         metricTotal.textContent = queries.length;
         metricAmount.textContent = queries[0]?.amount ? `Rs. ${queries[0].amount}` : '-';
         if (!queries.length) {
-          queryTable.innerHTML = '<tr><td colspan="6">No enquiries saved on this browser yet.</td></tr>';
+          queryTable.innerHTML = '<tr><td colspan="8">No enquiries saved on this browser yet.</td></tr>';
           return;
         }
         queryTable.innerHTML = queries
           .map(
-            (query) => `
+            (query, index) => `
               <tr>
                 <td><strong>${query.name}</strong><span>${query.city}</span></td>
                 <td>${query.loanType}</td>
                 <td>Rs. ${query.amount}</td>
                 <td><span>${query.mobile}</span><span>${query.email}</span></td>
                 <td><span>${query.documentType}</span><span>${query.fileName}</span></td>
+                <td><strong>${query.status || 'Submitted'}</strong></td>
                 <td>${query.submittedAt}</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="mini-button danger" type="button" data-query-action="Rejected" data-query-index="${index}">Reject</button>
+                    <button class="mini-button" type="button" data-query-action="In progress" data-query-index="${index}">Next process</button>
+                  </div>
+                </td>
               </tr>
             `
           )
@@ -636,6 +688,12 @@
         }
       });
 
+      employmentType.addEventListener('change', () => {
+        const requirement = getRequirementText(employmentType.value);
+        documentRequirement.textContent = requirement;
+        documentRequirementField.value = requirement;
+      });
+
       stepPills.forEach((pill) => {
         pill.addEventListener('click', () => {
           const requestedStep = Number(pill.dataset.stepJump);
@@ -674,10 +732,31 @@
         }
         submittedAt.value = new Date().toLocaleString();
         document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;
+        documentRequirementField.value = getRequirementText(employmentType.value);
         const queries = getQueries();
         queries.unshift(collectLoanSummary());
         saveQueries(queries.slice(0, 50));
         renderDashboard();
+        renderUserStatus();
+      });
+
+      queryTable.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-query-action]');
+        if (!button) return;
+        const queries = getQueries();
+        const query = queries[Number(button.dataset.queryIndex)];
+        if (!query) return;
+        query.status = button.dataset.queryAction;
+        saveQueries(queries);
+        renderDashboard();
+        renderUserStatus();
+        const subject = encodeURIComponent(`Varsha Venture loan application ${query.status}`);
+        const body = encodeURIComponent(
+          query.status === 'Rejected'
+            ? `Dear ${query.name},\n\nThank you for contacting Varsha Venture. After reviewing your loan enquiry, your application is currently rejected. You may contact us for more details.\n\nRegards,\nVarsha Venture`
+            : `Dear ${query.name},\n\nThank you for contacting Varsha Venture. Your loan enquiry is moved to the next process and is now in progress. Our team will contact you soon.\n\nRegards,\nVarsha Venture`
+        );
+        window.location.href = `mailto:${query.email}?subject=${subject}&body=${body}`;
       });
 
       document.querySelector('#logout-user').addEventListener('click', () => {
@@ -700,6 +779,7 @@
       });
 
       document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;
+      documentRequirementField.value = getRequirementText(employmentType.value);
       showStep(0);
       refreshSession();
       renderDashboard();

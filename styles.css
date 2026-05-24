@@ -512,6 +512,19 @@ textarea:focus {
   font-weight: 850;
 }
 
+.status-banner,
+.requirement-callout {
+  margin-bottom: 16px;
+  border: 1px solid rgba(11, 122, 117, 0.22);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: #e9f4f2;
+  color: var(--accent-strong);
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.5;
+}
+
 .form-actions {
   align-items: center;
   justify-content: space-between;
@@ -586,6 +599,29 @@ td {
 td span {
   display: block;
   font-size: 12px;
+}
+
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mini-button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mini-button.danger {
+  background: var(--danger);
 }
 
 .dashboard-note {
