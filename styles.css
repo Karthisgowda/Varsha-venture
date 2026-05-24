@@ -116,6 +116,14 @@ textarea {
   color: #fff;
 }
 
+.nav-item:focus-visible,
+.button:focus-visible,
+.submit-button:focus-visible,
+.step-pill:focus-visible {
+  outline: 3px solid rgba(240, 180, 41, 0.7);
+  outline-offset: 2px;
+}
+
 .sidebar-card {
   display: grid;
   gap: 8px;
