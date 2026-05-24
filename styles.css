@@ -674,7 +674,7 @@ td span {
   .sidebar,
   .topbar,
   .view {
-    padding: 18px;
+    padding: 16px;
   }
 
   .sidebar {
@@ -735,7 +735,7 @@ td span {
   }
 
   #view-home .quick-stats div {
-    padding: 12px;
+    padding: 10px;
   }
 
   #view-home .quick-stats dt {
