@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#102a43" />
     <title>Varsha Venture | Loan Portal</title>
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="styles.css?v=20260524-email-docs-flow" />
+    <link rel="stylesheet" href="styles.css?v=20260524-mail-summary" />
   </head>
   <body>
     <div class="app-shell">
@@ -174,6 +174,7 @@
             <input type="hidden" name="Logged in user email" id="logged-user-email" value="" />
             <input type="hidden" name="Submitted from website at" id="submitted-at" value="" />
             <input type="hidden" name="Mandatory document requirement" id="document-requirement-field" value="" />
+            <textarea name="Complete enquiry summary" id="complete-enquiry-summary" hidden></textarea>
 
             <div class="status-banner" id="user-application-status" hidden></div>
 
@@ -367,7 +368,7 @@
               </label>
               <label class="wide file-field">
                 Upload document up to 10 MB
-                <input id="loan-document" name="Loan document" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.zip" required />
+                <input id="loan-document" name="attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.zip" required />
                 <span id="file-help">Accepted: PDF, JPG, PNG, DOC, DOCX, ZIP. Upload one combined file up to 10 MB.</span>
               </label>
               <label class="consent">
@@ -484,6 +485,7 @@
       const employmentType = document.querySelector('#employment-type');
       const documentRequirement = document.querySelector('#document-requirement');
       const documentRequirementField = document.querySelector('#document-requirement-field');
+      const completeEnquirySummary = document.querySelector('#complete-enquiry-summary');
       const userApplicationStatus = document.querySelector('#user-application-status');
       const queryTable = document.querySelector('#query-table');
       const metricTotal = document.querySelector('#metric-total');
@@ -596,6 +598,49 @@
           status: 'Submitted',
           submittedAt: new Date().toLocaleString(),
         };
+      };
+
+      const buildCompleteEmailSummary = () => {
+        const formData = new FormData(loanForm);
+        const file = fileInput.files[0];
+        const lines = [
+          'Varsha Venture Loan Enquiry',
+          `Submitted at: ${submittedAt.value}`,
+          '',
+          'Applicant Details',
+          `Full name: ${formData.get('Full name') || ''}`,
+          `Mobile number: ${formData.get('Mobile number') || ''}`,
+          `Email address: ${formData.get('Email address') || ''}`,
+          `City: ${formData.get('City') || ''}`,
+          `Date of birth: ${formData.get('Date of birth') || ''}`,
+          `Gender: ${formData.get('Gender') || ''}`,
+          `Marital status: ${formData.get('Marital status') || ''}`,
+          `Complete address: ${formData.get('Complete address') || ''}`,
+          '',
+          'Loan Details',
+          `Loan type: ${formData.get('Loan type') || ''}`,
+          `Required loan amount: ${formData.get('Required loan amount') || ''}`,
+          `Preferred tenure: ${formData.get('Preferred tenure') || ''}`,
+          `Employment type: ${formData.get('Employment type') || ''}`,
+          `Monthly income: ${formData.get('Monthly income') || ''}`,
+          `Existing monthly EMI: ${formData.get('Existing monthly EMI') || ''}`,
+          `Credit score range: ${formData.get('Credit score range') || ''}`,
+          `Company or business name: ${formData.get('Company or business name') || ''}`,
+          `Work or business experience: ${formData.get('Work or business experience') || ''}`,
+          `Collateral available: ${formData.get('Collateral available') || ''}`,
+          `Property or vehicle details: ${formData.get('Property or vehicle details') || ''}`,
+          `Loan purpose: ${formData.get('Loan purpose') || ''}`,
+          '',
+          'KYC and Upload Details',
+          `PAN number: ${formData.get('PAN number') || ''}`,
+          `Aadhaar last 4 digits: ${formData.get('Aadhaar last 4 digits') || ''}`,
+          `Preferred contact time: ${formData.get('Preferred contact time') || ''}`,
+          `Document type uploaded: ${formData.get('Document type uploaded') || ''}`,
+          `Mandatory document requirement: ${documentRequirementField.value}`,
+          `Additional loan information: ${formData.get('Additional loan information') || ''}`,
+          `Uploaded file: ${file ? file.name : 'No file selected'}`,
+        ];
+        completeEnquirySummary.value = lines.join('\n');
       };
 
       const renderUserStatus = () => {
@@ -733,6 +778,7 @@
         submittedAt.value = new Date().toLocaleString();
         document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;
         documentRequirementField.value = getRequirementText(employmentType.value);
+        buildCompleteEmailSummary();
         const queries = getQueries();
         queries.unshift(collectLoanSummary());
         saveQueries(queries.slice(0, 50));
