@@ -25,7 +25,7 @@ body {
 
 body {
   margin: 0;
-  overflow: hidden;
+  overflow: auto;
   color: var(--ink);
   background: var(--soft);
 }
@@ -45,8 +45,8 @@ textarea {
 .app-shell {
   display: grid;
   grid-template-columns: 292px minmax(0, 1fr);
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
+  overflow: visible;
 }
 
 .sidebar {
@@ -213,7 +213,7 @@ h3 {
 .view {
   display: none;
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
   padding: clamp(20px, 4vw, 46px);
 }
 
@@ -364,8 +364,7 @@ td span {
   display: grid;
   width: min(520px, 100%);
   gap: 12px;
-  max-height: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .auth-card h2 {
@@ -616,14 +615,13 @@ td span {
 
 @media (max-width: 980px) {
   body {
-    overflow: hidden;
+    overflow: auto;
   }
 
   .app-shell {
     grid-template-rows: auto minmax(0, 1fr);
     grid-template-columns: 1fr;
-    height: 100dvh;
-    min-height: 0;
+    min-height: 100dvh;
   }
 
   .sidebar {
@@ -650,7 +648,7 @@ td span {
   }
 
   .workspace {
-    min-height: 0;
+    min-height: auto;
   }
 
   .topbar,
@@ -695,10 +693,6 @@ td span {
 
   .topbar {
     gap: 10px;
-  }
-
-  .view {
-    overflow: hidden;
   }
 
   .quick-stats,
