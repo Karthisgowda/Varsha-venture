@@ -150,7 +150,7 @@
           <form
             class="portal-card loan-form"
             id="loan-form"
-            action="https://formsubmit.co/vvltdpvt@gmail.com"
+            action="#"
             method="POST"
             enctype="multipart/form-data"
             hidden
@@ -454,8 +454,18 @@
                 </tbody>
               </table>
             </div>
+            <div class="query-detail-panel" id="query-detail-panel" hidden>
+              <div class="dashboard-header compact">
+                <div>
+                  <p class="eyebrow">Application detail</p>
+                  <h3 id="detail-title">Client details</h3>
+                </div>
+                <button class="button secondary" type="button" id="close-detail">Close</button>
+              </div>
+              <pre id="detail-content"></pre>
+            </div>
             <p class="dashboard-note">
-              Dashboard records are saved locally in this browser and each enquiry is also emailed to the admin address. A shared dashboard for all client devices requires a database-backed deployment.
+              Dashboard records are saved locally in this browser. The submit button opens an email draft to the admin with the customer name, mobile number, and email address.
             </p>
           </div>
         </section>
@@ -488,6 +498,9 @@
       const completeEnquirySummary = document.querySelector('#complete-enquiry-summary');
       const userApplicationStatus = document.querySelector('#user-application-status');
       const queryTable = document.querySelector('#query-table');
+      const queryDetailPanel = document.querySelector('#query-detail-panel');
+      const detailTitle = document.querySelector('#detail-title');
+      const detailContent = document.querySelector('#detail-content');
       const metricTotal = document.querySelector('#metric-total');
       const metricAmount = document.querySelector('#metric-amount');
       const formSteps = document.querySelectorAll('.form-step');
@@ -509,6 +522,13 @@
           return 'Mandatory documents: KYC proof, latest 6 months bank statement, and latest 2 years ITR.';
         }
         return 'Mandatory documents: KYC proof plus latest income proof and latest 6 months bank statement where available.';
+      };
+      const buildAdminMailUrl = (query) => {
+        const subject = encodeURIComponent('New Varsha Venture loan enquiry');
+        const body = encodeURIComponent(
+          `Customer name: ${query.name}\nMobile number: ${query.mobile}\nEmail address: ${query.email}`
+        );
+        return `mailto:vvltdpvt@gmail.com?subject=${subject}&body=${body}`;
       };
 
       const showView = (name) => {
@@ -595,6 +615,7 @@
           income: formData.get('Monthly income') || '',
           documentType: formData.get('Document type uploaded') || '',
           fileName: file ? file.name : 'No file',
+          fullDetails: completeEnquirySummary.value,
           status: 'Submitted',
           submittedAt: new Date().toLocaleString(),
         };
@@ -676,6 +697,7 @@
                 <td>${query.submittedAt}</td>
                 <td>
                   <div class="table-actions">
+                    <button class="mini-button secondary-mini" type="button" data-query-action="View details" data-query-index="${index}">View</button>
                     <button class="mini-button danger" type="button" data-query-action="Rejected" data-query-index="${index}">Reject</button>
                     <button class="mini-button" type="button" data-query-action="In progress" data-query-index="${index}">Next process</button>
                   </div>
@@ -761,15 +783,14 @@
       });
 
       loanForm.addEventListener('submit', (event) => {
+        event.preventDefault();
         const user = getUser();
         const file = fileInput.files[0];
         if (!user) {
-          event.preventDefault();
           showView('user-login');
           return;
         }
         if (file && file.size > MAX_FILE_SIZE) {
-          event.preventDefault();
           fileInput.value = '';
           fileHelp.textContent = 'File is bigger than 10 MB. Please upload a smaller document.';
           fileHelp.classList.add('error-text');
@@ -780,10 +801,17 @@
         documentRequirementField.value = getRequirementText(employmentType.value);
         buildCompleteEmailSummary();
         const queries = getQueries();
-        queries.unshift(collectLoanSummary());
+        const newQuery = collectLoanSummary();
+        queries.unshift(newQuery);
         saveQueries(queries.slice(0, 50));
         renderDashboard();
         renderUserStatus();
+        const mailWindow = window.open(buildAdminMailUrl(newQuery), '_blank');
+        if (!mailWindow) {
+          window.location.href = buildAdminMailUrl(newQuery);
+          return;
+        }
+        window.location.href = new URL('thanks.html', window.location.href).href;
       });
 
       queryTable.addEventListener('click', (event) => {
@@ -792,6 +820,13 @@
         const queries = getQueries();
         const query = queries[Number(button.dataset.queryIndex)];
         if (!query) return;
+        if (button.dataset.queryAction === 'View details') {
+          detailTitle.textContent = `${query.name || 'Client'} - ${query.loanType || 'Loan enquiry'}`;
+          detailContent.textContent = query.fullDetails || 'No full detail summary saved for this enquiry.';
+          queryDetailPanel.hidden = false;
+          queryDetailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          return;
+        }
         query.status = button.dataset.queryAction;
         saveQueries(queries);
         renderDashboard();
@@ -821,7 +856,12 @@
 
       document.querySelector('#clear-dashboard').addEventListener('click', () => {
         saveQueries([]);
+        queryDetailPanel.hidden = true;
         renderDashboard();
+      });
+
+      document.querySelector('#close-detail').addEventListener('click', () => {
+        queryDetailPanel.hidden = true;
       });
 
       document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;
