@@ -383,6 +383,7 @@
               <button class="button primary" type="button" id="next-step">Next</button>
               <button class="submit-button" type="submit" id="submit-loan" hidden>Send loan enquiry</button>
             </div>
+            <p class="submit-hint" id="submit-hint">Complete all required details and attach the document to show the send button.</p>
           </form>
         </section>
 
@@ -508,6 +509,7 @@
       const prevStepButton = document.querySelector('#prev-step');
       const nextStepButton = document.querySelector('#next-step');
       const submitLoanButton = document.querySelector('#submit-loan');
+      const submitHint = document.querySelector('#submit-hint');
       let currentStep = 0;
 
       const getUser = () => JSON.parse(localStorage.getItem('vvUser') || 'null');
@@ -558,7 +560,7 @@
         });
         prevStepButton.hidden = currentStep === 0;
         nextStepButton.hidden = currentStep === formSteps.length - 1;
-        submitLoanButton.hidden = currentStep !== formSteps.length - 1;
+        updateSubmitVisibility();
       };
 
       const validateCurrentStep = () => {
@@ -570,6 +572,15 @@
           }
         }
         return true;
+      };
+      const isLoanFormComplete = () => {
+        const requiredFields = [...loanForm.querySelectorAll('input[required], select[required], textarea[required]')];
+        return requiredFields.every((field) => field.checkValidity());
+      };
+      const updateSubmitVisibility = () => {
+        const readyToSubmit = currentStep === formSteps.length - 1 && isLoanFormComplete();
+        submitLoanButton.hidden = !readyToSubmit;
+        submitHint.hidden = readyToSubmit || currentStep !== formSteps.length - 1;
       };
 
       const refreshSession = () => {
@@ -753,6 +764,7 @@
           fileHelp.textContent = `${file.name} selected. File size is within the 10 MB limit.`;
           fileHelp.classList.remove('error-text');
         }
+        updateSubmitVisibility();
       });
 
       employmentType.addEventListener('change', () => {
@@ -781,6 +793,9 @@
           showStep(currentStep + 1);
         }
       });
+
+      loanForm.addEventListener('input', updateSubmitVisibility);
+      loanForm.addEventListener('change', updateSubmitVisibility);
 
       loanForm.addEventListener('submit', (event) => {
         event.preventDefault();

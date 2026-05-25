@@ -513,7 +513,8 @@ textarea:focus {
 }
 
 .status-banner,
-.requirement-callout {
+.requirement-callout,
+.submit-hint {
   margin-bottom: 16px;
   border: 1px solid rgba(11, 122, 117, 0.22);
   border-radius: 8px;
@@ -523,6 +524,12 @@ textarea:focus {
   font-size: 13px;
   font-weight: 850;
   line-height: 1.5;
+}
+
+.submit-hint {
+  margin: 12px 0 0;
+  background: #fff7e0;
+  color: #7a4d00;
 }
 
 .form-actions {
