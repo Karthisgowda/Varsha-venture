@@ -25,3 +25,4 @@ Checkpoint 24: verified loan portal shared-dashboard and email submission work o
 Checkpoint 25: verified loan portal shared-dashboard and email submission work on 2026-05-30 01:55:03 +05:30.
 Checkpoint 26: verified loan portal shared-dashboard and email submission work on 2026-05-30 01:55:03 +05:30.
 Checkpoint 27: verified loan portal shared-dashboard and email submission work on 2026-05-30 01:55:03 +05:30.
+Checkpoint 28: verified loan portal shared-dashboard and email submission work on 2026-05-30 01:55:03 +05:30.
