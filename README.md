@@ -4,12 +4,12 @@ Static loan-provider portal for Varsha Venture.
 
 ## Features
 
-- Portal-style navigation without long page scrolling
+- Professional portal navigation with normal page scrolling where content needs space
 - User login before loan detail upload
-- Three-step loan enquiry form with document upload
+- Three-step loan enquiry form with ZIP/PDF/image/document upload up to 10 MB
 - Separate admin login and dashboard screen
 - Firebase-ready shared admin dashboard across devices
-- Admin email draft opened for `vvltdpvt@gmail.com` with customer contact details
+- Compact admin email submission to `vvltdpvt@gmail.com` with customer name, phone, email, and attachment
 - GitHub Pages-ready static deployment
 
 ## Admin Access
@@ -19,7 +19,7 @@ Static loan-provider portal for Varsha Venture.
 
 ## Email Note
 
-The static site opens a mail draft for `vvltdpvt@gmail.com`. Fully automatic email sending needs a backend email function.
+The form posts to `https://formsubmit.co/vvltdpvt@gmail.com`. FormSubmit may send a one-time activation email to `vvltdpvt@gmail.com`; approve that email once so future enquiry emails deliver automatically.
 
 ## Deployment
 
@@ -27,4 +27,4 @@ The live site is deployed with GitHub Pages from the `main` branch.
 
 ## Firebase
 
-See `FIREBASE_SETUP.md` and fill `firebase-config.js` to make phone submissions appear on the laptop admin dashboard.
+See `FIREBASE_SETUP.md` and fill `firebase-config.js` to make phone submissions appear on the laptop admin dashboard. Until Firebase is configured, the dashboard warning stays yellow and records remain local to the submitting browser.

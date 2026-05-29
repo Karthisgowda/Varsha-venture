@@ -144,7 +144,7 @@ textarea {
 
 .workspace {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
   min-width: 0;
 }
 
@@ -213,7 +213,7 @@ h3 {
 .view {
   display: none;
   min-height: 0;
-  overflow-y: auto;
+  overflow: visible;
   padding: clamp(14px, 3vw, 28px);
 }
 
@@ -664,6 +664,34 @@ td span {
 .dashboard-note {
   margin: 16px 0 0;
   font-size: 13px;
+}
+
+.backend-status {
+  margin: 14px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 800;
+  color: var(--muted);
+  background: #f8fafc;
+}
+
+.backend-status.ready {
+  border-color: rgba(0, 112, 93, 0.28);
+  color: var(--accent-strong);
+  background: #e8f6f3;
+}
+
+.backend-status.warning {
+  border-color: rgba(181, 122, 0, 0.35);
+  color: #7a4f00;
+  background: #fff7df;
+}
+
+.dashboard-backend-status {
+  margin: 0;
 }
 
 .thanks-page {

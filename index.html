@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#102a43" />
     <title>Varsha Venture | Loan Portal</title>
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href="styles.css?v=20260524-mail-summary" />
+    <link rel="stylesheet" href="styles.css?v=20260530-shared-dashboard-status" />
   </head>
   <body>
     <div class="app-shell">
@@ -34,7 +34,7 @@
         <div class="sidebar-card">
           <span class="card-label">Admin</span>
           <strong>vvltdpvt@gmail.com</strong>
-          <small>Client enquiries are emailed automatically after submission.</small>
+          <small>Client enquiries are saved to the shared dashboard when Firebase is active.</small>
         </div>
       </aside>
 
@@ -53,7 +53,7 @@
               <p class="eyebrow">Varsha Venture</p>
               <h2>Login, add loan details, upload documents, and send the enquiry by email.</h2>
               <p class="lead">
-                Users can only submit loan details after login. Admin access is separate and opens a dashboard for locally saved enquiries.
+                Users can only submit loan details after login. Admin access is separate and opens the shared dashboard when Firebase is configured.
               </p>
               <div class="hero-actions">
                 <button class="button primary" type="button" data-view-link="user-login">Login as user</button>
@@ -150,7 +150,7 @@
           <form
             class="portal-card loan-form"
             id="loan-form"
-            action="#"
+            action="https://formsubmit.co/vvltdpvt@gmail.com"
             method="POST"
             enctype="multipart/form-data"
             hidden
@@ -403,6 +403,7 @@
               </label>
               <button class="submit-button" type="submit">Open dashboard</button>
               <p class="status-text" id="admin-status">Admin dashboard locked.</p>
+              <p class="backend-status" id="admin-backend-status">Checking shared dashboard connection...</p>
             </form>
           </div>
         </section>
@@ -421,6 +422,10 @@
               <span>Receiving email</span>
               <strong>vvltdpvt@gmail.com</strong>
             </div>
+          </div>
+
+          <div class="backend-status dashboard-backend-status" id="dashboard-backend-status">
+            Checking shared dashboard connection...
           </div>
 
           <div class="portal-card dashboard-card">
@@ -466,7 +471,7 @@
               <pre id="detail-content"></pre>
             </div>
             <p class="dashboard-note">
-              With Firebase configured, every device writes to the same admin dashboard and uploaded documents are stored in Firebase Storage. Without Firebase config, records stay only in this browser.
+              Firebase must be configured for phone, laptop, and other-device enquiries to appear in this one admin dashboard.
             </p>
           </div>
         </section>
@@ -530,10 +535,13 @@
       const nextStepButton = document.querySelector('#next-step');
       const submitLoanButton = document.querySelector('#submit-loan');
       const submitHint = document.querySelector('#submit-hint');
+      const backendStatusPanels = document.querySelectorAll('.backend-status');
+      const FORM_SUBMIT_ACTION = 'https://formsubmit.co/vvltdpvt@gmail.com';
       let currentStep = 0;
       let db = null;
       let storage = null;
       let firebaseReady = false;
+      let firebaseError = '';
       let remoteQueries = [];
 
       const hasFirebaseConfig =
@@ -549,6 +557,7 @@
           storage = getStorage(app);
           firebaseReady = true;
         } catch (error) {
+          firebaseError = error.message || 'Firebase could not start.';
           console.error('Firebase setup failed:', error);
         }
       }
@@ -558,6 +567,27 @@
       const getLocalQueries = () => JSON.parse(localStorage.getItem('vvQueries') || '[]');
       const getQueries = () => (firebaseReady ? remoteQueries : getLocalQueries());
       const saveLocalQueries = (queries) => localStorage.setItem('vvQueries', JSON.stringify(queries));
+      const getBackendMessage = () => {
+        if (firebaseReady) {
+          return 'Shared dashboard active. Enquiries from phone, laptop, and other devices will appear here.';
+        }
+        if (!hasFirebaseConfig) {
+          return 'Shared dashboard not active: firebase-config.js still has placeholder values. Enquiries saved before Firebase setup stay only on this browser.';
+        }
+        return `Shared dashboard not active: ${firebaseError || 'Firebase connection failed. Check Firestore and Storage setup.'}`;
+      };
+      const renderBackendStatus = () => {
+        backendStatusPanels.forEach((panel) => {
+          panel.textContent = getBackendMessage();
+          panel.classList.toggle('ready', firebaseReady);
+          panel.classList.toggle('warning', !firebaseReady);
+        });
+      };
+      const getEmptyDashboardMessage = () => (
+        firebaseReady
+          ? 'No enquiries have reached the shared Firebase dashboard yet.'
+          : 'No shared enquiries visible because Firebase is not configured. This browser can only show its own local test records.'
+      );
       const getRequirementText = (employment) => {
         if (employment === 'Salaried') {
           return 'Mandatory documents: KYC proof, latest 3 months salary slips, and latest 6 months bank statement.';
@@ -593,7 +623,9 @@
           renderDashboard();
           renderUserStatus();
         }, (error) => {
+          firebaseError = error.message || 'Firebase dashboard sync failed.';
           console.error('Firebase dashboard sync failed:', error);
+          renderBackendStatus();
         });
       };
 
@@ -742,6 +774,46 @@
         completeEnquirySummary.value = lines.join('\n');
       };
 
+      const setHiddenField = (name, value) => {
+        let field = loanForm.querySelector(`input[type="hidden"][name="${name}"]`);
+        if (!field) {
+          field = document.createElement('input');
+          field.type = 'hidden';
+          field.name = name;
+          loanForm.appendChild(field);
+        }
+        field.value = value || '';
+      };
+
+      const prepareCompactEmailSubmission = (query) => {
+        setHiddenField('Customer name', query.name);
+        setHiddenField('Customer mobile number', query.mobile);
+        setHiddenField('Customer email address', query.email);
+        setHiddenField('Uploaded document link', query.documentUrl || 'Document is attached to this email submission.');
+        setHiddenField('Admin dashboard storage', firebaseReady ? 'Saved to shared Firebase dashboard.' : 'Saved only on this browser until Firebase config is completed.');
+
+        const keepNames = new Set([
+          '_subject',
+          '_captcha',
+          '_template',
+          '_next',
+          '_autoresponse',
+          '_replyto',
+          'Customer name',
+          'Customer mobile number',
+          'Customer email address',
+          'Uploaded document link',
+          'Admin dashboard storage',
+          'attachment',
+        ]);
+        loanForm.querySelectorAll('input, select, textarea').forEach((field) => {
+          if (!keepNames.has(field.name)) {
+            field.disabled = true;
+          }
+        });
+        loanForm.action = FORM_SUBMIT_ACTION;
+      };
+
       const renderUserStatus = () => {
         const user = getUser();
         if (!user) return;
@@ -759,7 +831,7 @@
         metricTotal.textContent = queries.length;
         metricAmount.textContent = queries[0]?.amount ? `Rs. ${queries[0].amount}` : '-';
         if (!queries.length) {
-          queryTable.innerHTML = '<tr><td colspan="8">No enquiries saved on this browser yet.</td></tr>';
+          queryTable.innerHTML = `<tr><td colspan="8">${getEmptyDashboardMessage()}</td></tr>`;
           return;
         }
         queryTable.innerHTML = queries
@@ -883,7 +955,7 @@
         }
         submittedAt.value = new Date().toLocaleString();
         submitLoanButton.disabled = true;
-        submitLoanButton.textContent = firebaseReady ? 'Uploading...' : 'Saving...';
+        submitLoanButton.textContent = firebaseReady ? 'Uploading...' : 'Submitting...';
         document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;
         documentRequirementField.value = getRequirementText(employmentType.value);
         buildCompleteEmailSummary();
@@ -906,16 +978,15 @@
           }
           renderDashboard();
           renderUserStatus();
-          const mailWindow = window.open(buildAdminMailUrl(newQuery), '_blank');
-          if (!mailWindow) {
-            window.location.href = buildAdminMailUrl(newQuery);
-            return;
-          }
-          window.location.href = new URL('thanks.html', window.location.href).href;
+          prepareCompactEmailSubmission(newQuery);
+          loanForm.submit();
         } catch (error) {
           console.error('Application submission failed:', error);
-          fileHelp.textContent = 'Submission failed. Check Firebase setup and try again.';
+          fileHelp.textContent = 'Submission failed. Check Firebase setup, file size, and internet connection, then try again.';
           fileHelp.classList.add('error-text');
+          loanForm.querySelectorAll('input, select, textarea').forEach((field) => {
+            field.disabled = false;
+          });
         } finally {
           submitLoanButton.disabled = false;
           submitLoanButton.textContent = 'Send loan enquiry';
@@ -983,6 +1054,7 @@
       documentRequirementField.value = getRequirementText(employmentType.value);
       showStep(0);
       refreshSession();
+      renderBackendStatus();
       startRemoteDashboardSync();
       renderDashboard();
     </script>

@@ -1,6 +1,6 @@
 # Firebase Setup
 
-This portal needs Firebase for cross-device admin dashboard data.
+This portal needs Firebase for cross-device admin dashboard data. Without this setup, GitHub Pages can only keep enquiries in the browser that submitted them.
 
 ## 1. Create Firebase services
 
@@ -12,6 +12,8 @@ Enable these in Firebase Console:
 ## 2. Add web config
 
 Open `firebase-config.js` and replace every `PASTE_...` value with the Firebase web app config.
+
+The website now shows a yellow warning in admin login and dashboard while those placeholder values are still present. When the real config is added, the warning changes to a green shared-dashboard message.
 
 ## 3. Suggested Firestore rules for testing
 
@@ -46,3 +48,9 @@ service firebase.storage {
 ## Important
 
 These test rules are open enough for development. Before real public use, add Firebase Auth and lock admin reads/updates to the admin account.
+
+## Email delivery
+
+The loan form posts to `https://formsubmit.co/vvltdpvt@gmail.com` so the admin email receives the customer's name, phone number, email address, and uploaded document. FormSubmit may send a one-time activation email to `vvltdpvt@gmail.com`; approve that email once so future submissions deliver automatically.
+
+The admin dashboard stores the complete application details. If Firebase is active, every device sees those details. If Firebase is not active, the dashboard only shows records from the same browser.
