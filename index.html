@@ -422,10 +422,31 @@
               <span>Receiving email</span>
               <strong>vvltdpvt@gmail.com</strong>
             </div>
+            <div class="metric-card">
+              <span>Dashboard mode</span>
+              <strong id="metric-mode">Local</strong>
+            </div>
           </div>
 
           <div class="backend-status dashboard-backend-status" id="dashboard-backend-status">
             Checking shared dashboard connection...
+          </div>
+
+          <div class="portal-card setup-card" id="firebase-setup-panel">
+            <div>
+              <p class="eyebrow">Required for all-device admin records</p>
+              <h2>Shared dashboard setup is not active</h2>
+              <p>
+                GitHub Pages cannot store enquiries from every phone and laptop by itself. Add a real Firebase web config in
+                <strong>firebase-config.js</strong>, then enable Firestore and Storage.
+              </p>
+            </div>
+            <ol class="setup-list">
+              <li>Create a Firebase web app and copy its config values.</li>
+              <li>Paste the values into <strong>firebase-config.js</strong>.</li>
+              <li>Enable Cloud Firestore and Firebase Storage.</li>
+              <li>Use the rules from <strong>FIREBASE_SETUP.md</strong>, then push the site again.</li>
+            </ol>
           </div>
 
           <div class="portal-card dashboard-card">
@@ -435,7 +456,7 @@
                 <h2>Submitted loan enquiries</h2>
               </div>
               <div class="dashboard-actions">
-                <button class="button secondary" type="button" id="clear-dashboard">Clear local records</button>
+                <button class="button secondary" type="button" id="clear-dashboard">Clear local browser records</button>
                 <button class="button primary" type="button" id="logout-admin">Logout admin</button>
               </div>
             </div>
@@ -529,6 +550,9 @@
       const detailContent = document.querySelector('#detail-content');
       const metricTotal = document.querySelector('#metric-total');
       const metricAmount = document.querySelector('#metric-amount');
+      const metricMode = document.querySelector('#metric-mode');
+      const firebaseSetupPanel = document.querySelector('#firebase-setup-panel');
+      const clearDashboardButton = document.querySelector('#clear-dashboard');
       const formSteps = document.querySelectorAll('.form-step');
       const stepPills = document.querySelectorAll('.step-pill');
       const prevStepButton = document.querySelector('#prev-step');
@@ -582,6 +606,9 @@
           panel.classList.toggle('ready', firebaseReady);
           panel.classList.toggle('warning', !firebaseReady);
         });
+        metricMode.textContent = firebaseReady ? 'Shared' : 'Local only';
+        firebaseSetupPanel.hidden = firebaseReady;
+        clearDashboardButton.hidden = firebaseReady;
       };
       const getEmptyDashboardMessage = () => (
         firebaseReady

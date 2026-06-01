@@ -13,7 +13,11 @@ Enable these in Firebase Console:
 
 Open `firebase-config.js` and replace every `PASTE_...` value with the Firebase web app config.
 
+Use `firebase-config.example.js` as the shape reference. The real values must come from Firebase Console > Project settings > Your apps > Web app.
+
 The website now shows a yellow warning in admin login and dashboard while those placeholder values are still present. When the real config is added, the warning changes to a green shared-dashboard message.
+
+If the admin dashboard says "Local only", phone submissions will not appear on a laptop. That is expected until the real Firebase config and rules are live.
 
 ## 3. Suggested Firestore rules for testing
 
