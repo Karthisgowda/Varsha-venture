@@ -103,3 +103,4 @@ Checkpoint 102: admin shared-dashboard activation and enquiry submission review 
 Checkpoint 103: admin shared-dashboard activation and enquiry submission review on 2026-06-01 10:46:51 +05:30.
 Checkpoint 104: admin shared-dashboard activation and enquiry submission review on 2026-06-01 10:46:52 +05:30.
 Checkpoint 105: admin shared-dashboard activation and enquiry submission review on 2026-06-01 10:46:52 +05:30.
+Checkpoint 106: admin shared-dashboard activation and enquiry submission review on 2026-06-01 10:46:52 +05:30.
