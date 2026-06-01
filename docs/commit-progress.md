@@ -85,3 +85,4 @@ Checkpoint 084: admin shared-dashboard activation and enquiry submission review 
 Checkpoint 085: admin shared-dashboard activation and enquiry submission review on 2026-06-01 10:46:47 +05:30.
 Checkpoint 086: admin shared-dashboard activation and enquiry submission review on 2026-06-01 10:46:48 +05:30.
 Checkpoint 087: admin shared-dashboard activation and enquiry submission review on 2026-06-01 10:46:48 +05:30.
+Checkpoint 088: admin shared-dashboard activation and enquiry submission review on 2026-06-01 10:46:48 +05:30.
