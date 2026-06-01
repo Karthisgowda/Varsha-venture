@@ -532,6 +532,18 @@ textarea:focus {
   color: #7a4d00;
 }
 
+.email-delivery-note {
+  margin-bottom: 18px;
+  border: 1px solid rgba(11, 122, 117, 0.2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: var(--accent-strong);
+  background: #eef8f6;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 750;
+}
+
 .form-actions {
   align-items: center;
   justify-content: space-between;
@@ -720,6 +732,20 @@ td span {
   font-weight: 750;
 }
 
+.receipt-card {
+  margin-bottom: 16px;
+  border-color: rgba(11, 122, 117, 0.18);
+  background: #f7fbfa;
+}
+
+.receipt-card h3 {
+  margin-bottom: 6px;
+}
+
+.receipt-card p:last-child {
+  margin-bottom: 0;
+}
+
 .thanks-page {
   display: grid;
   min-height: 100vh;
@@ -740,6 +766,24 @@ td span {
 
 .thanks-card .brand-mark {
   margin-bottom: 18px;
+}
+
+.receipt-summary,
+.email-activation-note {
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.receipt-summary {
+  color: var(--accent-strong);
+  background: #e9f4f2;
+}
+
+.email-activation-note {
+  color: #7a4d00;
+  background: #fff7e0;
 }
 
 @media (max-width: 980px) {

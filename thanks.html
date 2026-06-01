@@ -4,14 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thank You | Varsha Venture</title>
-    <link rel="stylesheet" href="styles.css?v=20260524-mail-summary" />
+    <link rel="stylesheet" href="styles.css?v=20260601-receipt" />
   </head>
   <body class="thanks-page">
     <main class="thanks-card">
       <span class="brand-mark">VV</span>
       <h1>Thank you for sending enquiry</h1>
       <p>We received your loan enquiry. We will get you back soon.</p>
+      <p class="receipt-summary" id="receipt-summary">Your submission receipt is saved in this browser.</p>
+      <p class="email-activation-note">
+        If this is the first email through FormSubmit, approve the activation email in <strong>vvltdpvt@gmail.com</strong>.
+      </p>
       <a class="button primary" href="index.html">Back to website</a>
     </main>
+    <script>
+      const receipt = JSON.parse(localStorage.getItem('vvLastSubmissionReceipt') || 'null');
+      if (receipt) {
+        document.querySelector('#receipt-summary').textContent =
+          `${receipt.name || 'Customer'} | ${receipt.mobile || 'No mobile'} | ${receipt.email || 'No email'} | ${receipt.submittedAt || 'Submitted'}`;
+      }
+    </script>
   </body>
 </html>

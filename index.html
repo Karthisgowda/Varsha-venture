@@ -163,6 +163,9 @@
               </div>
               <div class="limit-badge">Max file: 10 MB</div>
             </div>
+            <div class="email-delivery-note">
+              Email delivery uses FormSubmit. If this is the first enquiry, open <strong>vvltdpvt@gmail.com</strong> once and approve the FormSubmit activation email.
+            </div>
 
             <input type="hidden" name="_subject" value="New Varsha Venture loan enquiry" />
             <input type="hidden" name="_captcha" value="false" />
@@ -449,6 +452,14 @@
             </ol>
           </div>
 
+          <div class="portal-card receipt-card" id="admin-local-receipt" hidden>
+            <div>
+              <p class="eyebrow">Latest local submission receipt</p>
+              <h3 id="receipt-title">No local receipt yet</h3>
+              <p id="receipt-details">After a browser submits an enquiry, that browser saves a confirmation receipt here.</p>
+            </div>
+          </div>
+
           <div class="portal-card dashboard-card">
             <div class="dashboard-header">
               <div>
@@ -553,6 +564,9 @@
       const metricMode = document.querySelector('#metric-mode');
       const firebaseSetupPanel = document.querySelector('#firebase-setup-panel');
       const clearDashboardButton = document.querySelector('#clear-dashboard');
+      const adminLocalReceipt = document.querySelector('#admin-local-receipt');
+      const receiptTitle = document.querySelector('#receipt-title');
+      const receiptDetails = document.querySelector('#receipt-details');
       const formSteps = document.querySelectorAll('.form-step');
       const stepPills = document.querySelectorAll('.step-pill');
       const prevStepButton = document.querySelector('#prev-step');
@@ -591,6 +605,16 @@
       const getLocalQueries = () => JSON.parse(localStorage.getItem('vvQueries') || '[]');
       const getQueries = () => (firebaseReady ? remoteQueries : getLocalQueries());
       const saveLocalQueries = (queries) => localStorage.setItem('vvQueries', JSON.stringify(queries));
+      const getLastReceipt = () => JSON.parse(localStorage.getItem('vvLastSubmissionReceipt') || 'null');
+      const saveLastReceipt = (query) => {
+        localStorage.setItem('vvLastSubmissionReceipt', JSON.stringify({
+          name: query.name,
+          email: query.email,
+          mobile: query.mobile,
+          submittedAt: query.submittedAt,
+          mode: firebaseReady ? 'Shared Firebase dashboard' : 'Local browser record',
+        }));
+      };
       const getBackendMessage = () => {
         if (firebaseReady) {
           return 'Shared dashboard active. Enquiries from phone, laptop, and other devices will appear here.';
@@ -609,6 +633,7 @@
         metricMode.textContent = firebaseReady ? 'Shared' : 'Local only';
         firebaseSetupPanel.hidden = firebaseReady;
         clearDashboardButton.hidden = firebaseReady;
+        renderLocalReceipt();
       };
       const getEmptyDashboardMessage = () => (
         firebaseReady
@@ -888,6 +913,14 @@
           .join('');
       };
 
+      const renderLocalReceipt = () => {
+        const receipt = getLastReceipt();
+        adminLocalReceipt.hidden = !receipt;
+        if (!receipt) return;
+        receiptTitle.textContent = `${receipt.name || 'Customer'} submitted an enquiry`;
+        receiptDetails.textContent = `${receipt.mobile || 'No mobile'} | ${receipt.email || 'No email'} | ${receipt.submittedAt || 'Time not saved'} | ${receipt.mode || 'Local browser record'}`;
+      };
+
       navItems.forEach((item) => {
         item.addEventListener('click', (event) => {
           event.preventDefault();
@@ -1003,8 +1036,10 @@
             queries.unshift(newQuery);
             saveLocalQueries(queries.slice(0, 50));
           }
+          saveLastReceipt(newQuery);
           renderDashboard();
           renderUserStatus();
+          renderLocalReceipt();
           prepareCompactEmailSubmission(newQuery);
           loanForm.submit();
         } catch (error) {
