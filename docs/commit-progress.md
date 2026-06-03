@@ -222,3 +222,4 @@ Checkpoint 221: shared dashboard diagnostic, Firebase readiness, and admin visib
 Checkpoint 222: shared dashboard diagnostic, Firebase readiness, and admin visibility review on 2026-06-03 10:17:04 +05:30.
 Checkpoint 223: shared dashboard diagnostic, Firebase readiness, and admin visibility review on 2026-06-03 10:17:04 +05:30.
 Checkpoint 224: shared dashboard diagnostic, Firebase readiness, and admin visibility review on 2026-06-03 10:17:04 +05:30.
+Checkpoint 225: shared dashboard diagnostic, Firebase readiness, and admin visibility review on 2026-06-03 10:17:04 +05:30.
