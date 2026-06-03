@@ -435,6 +435,20 @@
             Checking shared dashboard connection...
           </div>
 
+          <div class="portal-card diagnostic-card" id="backend-diagnostic-card">
+            <div>
+              <p class="eyebrow">Admin dashboard diagnostic</p>
+              <h2 id="backend-diagnostic-title">Shared backend not connected</h2>
+              <p id="backend-diagnostic-copy">
+                The admin dashboard is in local browser mode. Phone submissions cannot appear here until Firebase is connected.
+              </p>
+            </div>
+            <div class="diagnostic-actions">
+              <button class="button secondary" type="button" id="run-backend-check">Check shared dashboard</button>
+              <a class="button primary" href="FIREBASE_SETUP.md" target="_blank" rel="noopener">Open setup guide</a>
+            </div>
+          </div>
+
           <div class="portal-card setup-card" id="firebase-setup-panel">
             <div>
               <p class="eyebrow">Required for all-device admin records</p>
@@ -567,6 +581,10 @@
       const adminLocalReceipt = document.querySelector('#admin-local-receipt');
       const receiptTitle = document.querySelector('#receipt-title');
       const receiptDetails = document.querySelector('#receipt-details');
+      const backendDiagnosticCard = document.querySelector('#backend-diagnostic-card');
+      const backendDiagnosticTitle = document.querySelector('#backend-diagnostic-title');
+      const backendDiagnosticCopy = document.querySelector('#backend-diagnostic-copy');
+      const runBackendCheckButton = document.querySelector('#run-backend-check');
       const formSteps = document.querySelectorAll('.form-step');
       const stepPills = document.querySelectorAll('.step-pill');
       const prevStepButton = document.querySelector('#prev-step');
@@ -624,7 +642,26 @@
         }
         return `Shared dashboard not active: ${firebaseError || 'Firebase connection failed. Check Firestore and Storage setup.'}`;
       };
+      const getDiagnosticMessage = () => {
+        if (firebaseReady) {
+          return {
+            title: 'Shared backend connected',
+            copy: 'Firebase is active. New submissions from other devices can appear in this admin dashboard.',
+          };
+        }
+        if (!hasFirebaseConfig) {
+          return {
+            title: 'Firebase config missing',
+            copy: 'firebase-config.js still has placeholder values. Replace every PASTE_ value with a real Firebase web app config, then push again.',
+          };
+        }
+        return {
+          title: 'Firebase connection failed',
+          copy: firebaseError || 'The Firebase config is present, but Firestore or Storage did not connect. Check Firebase rules and project settings.',
+        };
+      };
       const renderBackendStatus = () => {
+        const diagnostic = getDiagnosticMessage();
         backendStatusPanels.forEach((panel) => {
           panel.textContent = getBackendMessage();
           panel.classList.toggle('ready', firebaseReady);
@@ -633,6 +670,12 @@
         metricMode.textContent = firebaseReady ? 'Shared' : 'Local only';
         firebaseSetupPanel.hidden = firebaseReady;
         clearDashboardButton.hidden = firebaseReady;
+        backendDiagnosticCard.classList.toggle('ready', firebaseReady);
+        backendDiagnosticCard.classList.toggle('warning', !firebaseReady);
+        backendDiagnosticTitle.textContent = diagnostic.title;
+        backendDiagnosticCopy.textContent = diagnostic.copy;
+        runBackendCheckButton.textContent = firebaseReady ? 'Shared dashboard active' : 'Check shared dashboard';
+        runBackendCheckButton.disabled = firebaseReady;
         renderLocalReceipt();
       };
       const getEmptyDashboardMessage = () => (
@@ -1110,6 +1153,11 @@
 
       document.querySelector('#close-detail').addEventListener('click', () => {
         queryDetailPanel.hidden = true;
+      });
+
+      runBackendCheckButton.addEventListener('click', () => {
+        renderBackendStatus();
+        adminStatus.textContent = getBackendMessage();
       });
 
       document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;

@@ -706,6 +706,41 @@ td span {
   margin: 0;
 }
 
+.diagnostic-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.diagnostic-card h2 {
+  font-size: clamp(22px, 2.4vw, 30px);
+}
+
+.diagnostic-card p:last-child {
+  margin-bottom: 0;
+}
+
+.diagnostic-card.ready {
+  border-color: rgba(0, 112, 93, 0.24);
+  background: #f2faf8;
+}
+
+.diagnostic-card.warning {
+  border-color: rgba(181, 122, 0, 0.3);
+  background: #fffaf0;
+}
+
+.diagnostic-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .setup-card {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
@@ -826,9 +861,14 @@ td span {
 
   .topbar,
   .form-header,
-  .dashboard-header {
+  .dashboard-header,
+  .diagnostic-card {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .diagnostic-actions {
+    justify-content: flex-start;
   }
 
   .view-grid,

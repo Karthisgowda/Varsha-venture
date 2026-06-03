@@ -53,6 +53,18 @@ service firebase.storage {
 
 These test rules are open enough for development. Before real public use, add Firebase Auth and lock admin reads/updates to the admin account.
 
+## How to confirm it is working
+
+1. Open the live website.
+2. Login as admin.
+3. Check the `Dashboard mode` card.
+4. It must say `Shared`, not `Local only`.
+5. Press `Check shared dashboard`.
+6. Submit an enquiry from a phone.
+7. Refresh the admin dashboard on the laptop.
+
+If the dashboard still says `Local only`, the phone record cannot appear on the laptop because the site is still running without Firebase.
+
 ## Email delivery
 
 The loan form posts to `https://formsubmit.co/vvltdpvt@gmail.com` so the admin email receives the customer's name, phone number, email address, and uploaded document. FormSubmit may send a one-time activation email to `vvltdpvt@gmail.com`; approve that email once so future submissions deliver automatically.
