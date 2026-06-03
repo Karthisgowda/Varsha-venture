@@ -165,3 +165,4 @@ Checkpoint 164: enquiry receipt, FormSubmit activation, and shared-dashboard rea
 Checkpoint 165: enquiry receipt, FormSubmit activation, and shared-dashboard readiness review on 2026-06-01 10:53:06 +05:30.
 Checkpoint 166: enquiry receipt, FormSubmit activation, and shared-dashboard readiness review on 2026-06-01 10:53:06 +05:30.
 Checkpoint 167: enquiry receipt, FormSubmit activation, and shared-dashboard readiness review on 2026-06-01 10:53:06 +05:30.
+Checkpoint 168: shared dashboard diagnostic, Firebase readiness, and admin visibility review on 2026-06-03 10:16:46 +05:30.
