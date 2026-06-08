@@ -9,15 +9,15 @@ Enable these in Firebase Console:
 - Cloud Firestore
 - Cloud Storage
 
-## 2. Add web config
+## 2. Web config
 
-Open `firebase-config.js` and replace every `PASTE_...` value with the Firebase web app config.
+The Firebase web config is installed in `firebase-config.js` for project `karthiks-digital-canvas`.
 
 Use `firebase-config.example.js` as the shape reference. The real values must come from Firebase Console > Project settings > Your apps > Web app.
 
-The website now shows a yellow warning in admin login and dashboard while those placeholder values are still present. When the real config is added, the warning changes to a green shared-dashboard message.
+The website shows Firebase-ready status once this config loads. If records still do not appear across devices, Firestore or Storage rules need to be enabled in Firebase Console.
 
-If the admin dashboard says "Local only", phone submissions will not appear on a laptop. That is expected until the real Firebase config and rules are live.
+If the admin dashboard says "Firebase ready", config is loaded but Firestore has not confirmed data access yet. If it says "Shared", the cross-device dashboard is responding.
 
 ## 3. Suggested Firestore rules for testing
 

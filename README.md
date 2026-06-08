@@ -27,4 +27,6 @@ The live site is deployed with GitHub Pages from the `main` branch.
 
 ## Firebase
 
-See `FIREBASE_SETUP.md` and fill `firebase-config.js` to make phone submissions appear on the laptop admin dashboard. Until Firebase is configured, the dashboard warning stays yellow and records remain local to the submitting browser.
+Firebase config is installed in `firebase-config.js` for project `karthiks-digital-canvas`.
+
+See `FIREBASE_SETUP.md` to confirm Firestore and Storage are enabled with rules that allow the website to create enquiries, upload loan documents, and let the admin dashboard read/update application status.

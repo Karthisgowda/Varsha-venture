@@ -607,6 +607,7 @@
       let db = null;
       let storage = null;
       let firebaseReady = false;
+      let firebaseSyncReady = false;
       let firebaseError = '';
       let remoteQueries = [];
 
@@ -644,8 +645,11 @@
         }));
       };
       const getBackendMessage = () => {
+        if (firebaseReady && firebaseSyncReady) {
+          return 'Shared dashboard active. Firestore is responding and enquiries from other devices can appear here.';
+        }
         if (firebaseReady) {
-          return 'Shared dashboard active. Enquiries from phone, laptop, and other devices will appear here.';
+          return 'Firebase config loaded. Waiting for Firestore and Storage permissions to confirm shared dashboard access.';
         }
         if (!hasFirebaseConfig) {
           return 'Shared dashboard not active: firebase-config.js still has placeholder values. Enquiries saved before Firebase setup stay only on this browser.';
@@ -653,10 +657,16 @@
         return `Shared dashboard not active: ${firebaseError || 'Firebase connection failed. Check Firestore and Storage setup.'}`;
       };
       const getDiagnosticMessage = () => {
-        if (firebaseReady) {
+        if (firebaseReady && firebaseSyncReady) {
           return {
             title: 'Shared backend connected',
-            copy: 'Firebase is active. New submissions from other devices can appear in this admin dashboard.',
+            copy: 'Firestore is responding. New submissions from other devices can appear in this admin dashboard.',
+          };
+        }
+        if (firebaseReady) {
+          return {
+            title: 'Firebase config loaded',
+            copy: 'The Firebase project is configured. If the table does not update, check Firestore and Storage rules in Firebase Console.',
           };
         }
         if (!hasFirebaseConfig) {
@@ -672,9 +682,9 @@
       };
       const renderBackendStatus = () => {
         const diagnostic = getDiagnosticMessage();
-        globalBackendWarning.hidden = firebaseReady;
+        globalBackendWarning.hidden = firebaseReady && firebaseSyncReady;
         submissionModeNote.textContent = firebaseReady
-          ? 'Shared admin dashboard is active. This enquiry can appear on the admin device after submission.'
+          ? 'Firebase is configured. This enquiry will be saved to Firestore if database and storage rules allow this website.'
           : 'Admin dashboard is local only right now. Email will be sent, but phone-to-laptop dashboard records need Firebase setup.';
         submissionModeNote.classList.toggle('ready', firebaseReady);
         submissionModeNote.classList.toggle('warning', !firebaseReady);
@@ -683,15 +693,15 @@
           panel.classList.toggle('ready', firebaseReady);
           panel.classList.toggle('warning', !firebaseReady);
         });
-        metricMode.textContent = firebaseReady ? 'Shared' : 'Local only';
+        metricMode.textContent = firebaseReady ? (firebaseSyncReady ? 'Shared' : 'Firebase ready') : 'Local only';
         firebaseSetupPanel.hidden = firebaseReady;
         clearDashboardButton.hidden = firebaseReady;
-        backendDiagnosticCard.classList.toggle('ready', firebaseReady);
-        backendDiagnosticCard.classList.toggle('warning', !firebaseReady);
+        backendDiagnosticCard.classList.toggle('ready', firebaseReady && firebaseSyncReady);
+        backendDiagnosticCard.classList.toggle('warning', !firebaseReady || !firebaseSyncReady);
         backendDiagnosticTitle.textContent = diagnostic.title;
         backendDiagnosticCopy.textContent = diagnostic.copy;
-        runBackendCheckButton.textContent = firebaseReady ? 'Shared dashboard active' : 'Check shared dashboard';
-        runBackendCheckButton.disabled = firebaseReady;
+        runBackendCheckButton.textContent = firebaseReady && firebaseSyncReady ? 'Shared dashboard active' : 'Check shared dashboard';
+        runBackendCheckButton.disabled = firebaseReady && firebaseSyncReady;
         renderLocalReceipt();
       };
       const getEmptyDashboardMessage = () => (
@@ -730,10 +740,14 @@
         if (!firebaseReady) return;
         const enquiriesQuery = query(collection(db, 'loanEnquiries'), orderBy('createdAt', 'desc'));
         onSnapshot(enquiriesQuery, (snapshot) => {
+          firebaseSyncReady = true;
+          firebaseError = '';
           remoteQueries = snapshot.docs.map((entry) => ({ id: entry.id, ...entry.data() }));
+          renderBackendStatus();
           renderDashboard();
           renderUserStatus();
         }, (error) => {
+          firebaseSyncReady = false;
           firebaseError = error.message || 'Firebase dashboard sync failed.';
           console.error('Firebase dashboard sync failed:', error);
           renderBackendStatus();
