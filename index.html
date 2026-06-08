@@ -47,6 +47,11 @@
           <div class="session-pill" id="session-pill">Guest session</div>
         </header>
 
+        <div class="global-backend-warning" id="global-backend-warning" hidden>
+          <strong>Shared admin dashboard is not connected.</strong>
+          Phone submissions will not appear on another device until Firebase config is added.
+        </div>
+
         <section class="view active" id="view-home" data-title="Professional loan query portal">
           <div class="view-grid hero-view">
             <div class="hero-copy">
@@ -165,6 +170,9 @@
             </div>
             <div class="email-delivery-note">
               Email delivery uses FormSubmit. If this is the first enquiry, open <strong>vvltdpvt@gmail.com</strong> once and approve the FormSubmit activation email.
+            </div>
+            <div class="submission-mode-note" id="submission-mode-note">
+              Checking admin dashboard storage mode...
             </div>
 
             <input type="hidden" name="_subject" value="New Varsha Venture loan enquiry" />
@@ -591,6 +599,8 @@
       const nextStepButton = document.querySelector('#next-step');
       const submitLoanButton = document.querySelector('#submit-loan');
       const submitHint = document.querySelector('#submit-hint');
+      const globalBackendWarning = document.querySelector('#global-backend-warning');
+      const submissionModeNote = document.querySelector('#submission-mode-note');
       const backendStatusPanels = document.querySelectorAll('.backend-status');
       const FORM_SUBMIT_ACTION = 'https://formsubmit.co/vvltdpvt@gmail.com';
       let currentStep = 0;
@@ -662,6 +672,12 @@
       };
       const renderBackendStatus = () => {
         const diagnostic = getDiagnosticMessage();
+        globalBackendWarning.hidden = firebaseReady;
+        submissionModeNote.textContent = firebaseReady
+          ? 'Shared admin dashboard is active. This enquiry can appear on the admin device after submission.'
+          : 'Admin dashboard is local only right now. Email will be sent, but phone-to-laptop dashboard records need Firebase setup.';
+        submissionModeNote.classList.toggle('ready', firebaseReady);
+        submissionModeNote.classList.toggle('warning', !firebaseReady);
         backendStatusPanels.forEach((panel) => {
           panel.textContent = getBackendMessage();
           panel.classList.toggle('ready', firebaseReady);

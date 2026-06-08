@@ -221,6 +221,23 @@ h3 {
   display: block;
 }
 
+.global-backend-warning {
+  margin: 14px clamp(14px, 3vw, 28px) 0;
+  border: 1px solid rgba(181, 122, 0, 0.32);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #7a4d00;
+  background: #fff7e0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.global-backend-warning strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #5f3a00;
+}
+
 .view-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
@@ -542,6 +559,28 @@ textarea:focus {
   font-size: 13px;
   line-height: 1.45;
   font-weight: 750;
+}
+
+.submission-mode-note {
+  margin-bottom: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 800;
+}
+
+.submission-mode-note.ready {
+  border-color: rgba(0, 112, 93, 0.24);
+  color: var(--accent-strong);
+  background: #e9f4f2;
+}
+
+.submission-mode-note.warning {
+  border-color: rgba(181, 122, 0, 0.32);
+  color: #7a4d00;
+  background: #fff7e0;
 }
 
 .form-actions {
