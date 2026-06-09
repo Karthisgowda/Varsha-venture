@@ -437,6 +437,10 @@
               <span>Dashboard mode</span>
               <strong id="metric-mode">Local</strong>
             </div>
+            <div class="metric-card">
+              <span>Pending sync</span>
+              <strong id="metric-pending">0</strong>
+            </div>
           </div>
 
           <div class="backend-status dashboard-backend-status" id="dashboard-backend-status">
@@ -489,6 +493,7 @@
                 <h2>Submitted loan enquiries</h2>
               </div>
               <div class="dashboard-actions">
+                <button class="button secondary" type="button" id="sync-pending">Sync pending records</button>
                 <button class="button secondary" type="button" id="clear-dashboard">Clear local browser records</button>
                 <button class="button primary" type="button" id="logout-admin">Logout admin</button>
               </div>
@@ -588,8 +593,10 @@
       const metricTotal = document.querySelector('#metric-total');
       const metricAmount = document.querySelector('#metric-amount');
       const metricMode = document.querySelector('#metric-mode');
+      const metricPending = document.querySelector('#metric-pending');
       const firebaseSetupPanel = document.querySelector('#firebase-setup-panel');
       const clearDashboardButton = document.querySelector('#clear-dashboard');
+      const syncPendingButton = document.querySelector('#sync-pending');
       const adminLocalReceipt = document.querySelector('#admin-local-receipt');
       const receiptTitle = document.querySelector('#receipt-title');
       const receiptDetails = document.querySelector('#receipt-details');
@@ -651,18 +658,20 @@
       const getLocalQueries = () => JSON.parse(localStorage.getItem('vvQueries') || '[]');
       const getQueries = () => (firebaseReady ? remoteQueries : getLocalQueries());
       const saveLocalQueries = (queries) => localStorage.setItem('vvQueries', JSON.stringify(queries));
+      const getPendingRemoteQueries = () => JSON.parse(localStorage.getItem('vvPendingRemoteQueries') || '[]');
+      const savePendingRemoteQueries = (queries) => localStorage.setItem('vvPendingRemoteQueries', JSON.stringify(queries));
       const saveLocalQuery = (query) => {
         const queries = getLocalQueries();
         queries.unshift(query);
         saveLocalQueries(queries.slice(0, 50));
       };
       const savePendingRemoteQuery = (query) => {
-        const pending = JSON.parse(localStorage.getItem('vvPendingRemoteQueries') || '[]');
+        const pending = getPendingRemoteQueries();
         pending.unshift({
           ...query,
           pendingReason: firebaseError || 'Firebase write failed before remote dashboard save.',
         });
-        localStorage.setItem('vvPendingRemoteQueries', JSON.stringify(pending.slice(0, 20)));
+        savePendingRemoteQueries(pending.slice(0, 20));
       };
       const getLastReceipt = () => JSON.parse(localStorage.getItem('vvLastSubmissionReceipt') || 'null');
       const saveLastReceipt = (query) => {
@@ -729,8 +738,10 @@
           panel.classList.toggle('warning', !firebaseReady);
         });
         metricMode.textContent = firebaseReady ? (firebaseSyncReady ? 'Shared' : 'Firebase ready') : 'Local only';
+        metricPending.textContent = getPendingRemoteQueries().length;
         firebaseSetupPanel.hidden = firebaseReady;
         clearDashboardButton.hidden = firebaseReady;
+        syncPendingButton.disabled = !firebaseReady || !getPendingRemoteQueries().length;
         backendDiagnosticCard.classList.toggle('ready', firebaseReady && firebaseSyncReady);
         backendDiagnosticCard.classList.toggle('warning', !firebaseReady || !firebaseSyncReady);
         backendDiagnosticTitle.textContent = diagnostic.title;
@@ -770,6 +781,36 @@
         await uploadBytes(fileRef, file, { contentType: file.type || 'application/octet-stream' });
         const documentUrl = await getDownloadURL(fileRef);
         return { documentUrl, storagePath };
+      };
+
+      const syncPendingRemoteQueries = async () => {
+        const pending = getPendingRemoteQueries();
+        if (!firebaseReady || !pending.length) {
+          renderBackendStatus();
+          return;
+        }
+        syncPendingButton.disabled = true;
+        syncPendingButton.textContent = 'Syncing...';
+        await authReadyPromise;
+        const remaining = [];
+        for (const queryItem of pending) {
+          try {
+            const { pendingReason, id, createdAt, ...remoteData } = queryItem;
+            await addDoc(collection(db, 'loanEnquiries'), {
+              ...remoteData,
+              syncedFromPending: true,
+              syncedAt: serverTimestamp(),
+              createdAt: serverTimestamp(),
+            });
+          } catch (error) {
+            firebaseError = error.message || 'Pending enquiry sync failed.';
+            remaining.push(queryItem);
+          }
+        }
+        savePendingRemoteQueries(remaining);
+        syncPendingButton.textContent = 'Sync pending records';
+        renderBackendStatus();
+        renderDashboard();
       };
 
       const startRemoteDashboardSync = async () => {
@@ -1156,6 +1197,7 @@
               console.error('Firebase enquiry save failed:', error);
               savePendingRemoteQuery(newQuery);
               saveLocalQuery(newQuery);
+              renderBackendStatus();
             }
           } else {
             saveLocalQuery(newQuery);
@@ -1226,11 +1268,13 @@
 
       document.querySelector('#clear-dashboard').addEventListener('click', () => {
         saveLocalQueries([]);
+        savePendingRemoteQueries([]);
         if (firebaseReady) {
           remoteQueries = [];
         }
         queryDetailPanel.hidden = true;
         renderDashboard();
+        renderBackendStatus();
       });
 
       document.querySelector('#close-detail').addEventListener('click', () => {
@@ -1240,6 +1284,13 @@
       runBackendCheckButton.addEventListener('click', () => {
         renderBackendStatus();
         adminStatus.textContent = getBackendMessage();
+      });
+
+      syncPendingButton.addEventListener('click', async () => {
+        await syncPendingRemoteQueries();
+        adminStatus.textContent = getPendingRemoteQueries().length
+          ? 'Some pending records could not sync. Check Firebase rules and try again.'
+          : 'Pending local records synced or there was nothing pending.';
       });
 
       document.querySelector('input[name="_next"]').value = new URL('thanks.html', window.location.href).href;

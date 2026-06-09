@@ -96,6 +96,15 @@ These test rules are open enough for development. Before real public use, add Fi
 
 If the dashboard still says `Local only`, the phone record cannot appear on the laptop because the site is still running without Firebase.
 
+## Pending sync recovery
+
+If a customer submits while Firebase rules are blocking writes, the browser keeps a pending local copy before sending the email. After fixing Firebase Authentication, Firestore, and Storage rules:
+
+1. Login to the admin dashboard from the same browser that has pending records.
+2. Check the `Pending sync` metric.
+3. Press `Sync pending records`.
+4. Refresh the admin dashboard on another device and confirm the synced enquiry appears.
+
 ## Email delivery
 
 The loan form posts to `https://formsubmit.co/vvltdpvt@gmail.com` so the admin email receives the customer's name, phone number, email address, and uploaded document. FormSubmit may send a one-time activation email to `vvltdpvt@gmail.com`; approve that email once so future submissions deliver automatically.
