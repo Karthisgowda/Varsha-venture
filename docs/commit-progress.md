@@ -344,3 +344,4 @@ Checkpoint 343: anonymous Firebase auth, remote-save fallback, and dashboard syn
 Checkpoint 344: anonymous Firebase auth, remote-save fallback, and dashboard sync review on 2026-06-09 18:14:57 +05:30.
 Checkpoint 345: pending enquiry sync recovery and Firebase dashboard retry review on 2026-06-09 18:22:35 +05:30.
 Checkpoint 346: pending enquiry sync recovery and Firebase dashboard retry review on 2026-06-09 18:22:35 +05:30.
+Checkpoint 347: pending enquiry sync recovery and Firebase dashboard retry review on 2026-06-09 18:22:35 +05:30.
