@@ -536,6 +536,10 @@
       import { firebaseConfig } from './firebase-config.js';
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
       import {
+        getAuth,
+        signInAnonymously,
+      } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
+      import {
         addDoc,
         collection,
         doc,
@@ -606,9 +610,12 @@
       let currentStep = 0;
       let db = null;
       let storage = null;
+      let auth = null;
+      let authReadyPromise = Promise.resolve();
       let firebaseReady = false;
       let firebaseSyncReady = false;
       let firebaseError = '';
+      let authReady = false;
       let remoteQueries = [];
 
       const hasFirebaseConfig =
@@ -622,6 +629,16 @@
           const app = initializeApp(firebaseConfig);
           db = getFirestore(app);
           storage = getStorage(app);
+          auth = getAuth(app);
+          authReadyPromise = signInAnonymously(auth)
+            .then(() => {
+              authReady = true;
+            })
+            .catch((error) => {
+              authReady = false;
+              firebaseError = error.message || 'Firebase anonymous sign-in failed.';
+              console.error('Firebase anonymous sign-in failed:', error);
+            });
           firebaseReady = true;
         } catch (error) {
           firebaseError = error.message || 'Firebase could not start.';
@@ -634,6 +651,19 @@
       const getLocalQueries = () => JSON.parse(localStorage.getItem('vvQueries') || '[]');
       const getQueries = () => (firebaseReady ? remoteQueries : getLocalQueries());
       const saveLocalQueries = (queries) => localStorage.setItem('vvQueries', JSON.stringify(queries));
+      const saveLocalQuery = (query) => {
+        const queries = getLocalQueries();
+        queries.unshift(query);
+        saveLocalQueries(queries.slice(0, 50));
+      };
+      const savePendingRemoteQuery = (query) => {
+        const pending = JSON.parse(localStorage.getItem('vvPendingRemoteQueries') || '[]');
+        pending.unshift({
+          ...query,
+          pendingReason: firebaseError || 'Firebase write failed before remote dashboard save.',
+        });
+        localStorage.setItem('vvPendingRemoteQueries', JSON.stringify(pending.slice(0, 20)));
+      };
       const getLastReceipt = () => JSON.parse(localStorage.getItem('vvLastSubmissionReceipt') || 'null');
       const saveLastReceipt = (query) => {
         localStorage.setItem('vvLastSubmissionReceipt', JSON.stringify({
@@ -647,6 +677,9 @@
       const getBackendMessage = () => {
         if (firebaseReady && firebaseSyncReady) {
           return 'Shared dashboard active. Firestore is responding and enquiries from other devices can appear here.';
+        }
+        if (firebaseReady && !authReady) {
+          return 'Firebase config loaded. Waiting for anonymous Firebase sign-in before confirming shared dashboard access.';
         }
         if (firebaseReady) {
           return 'Firebase config loaded. Waiting for Firestore and Storage permissions to confirm shared dashboard access.';
@@ -666,7 +699,9 @@
         if (firebaseReady) {
           return {
             title: 'Firebase config loaded',
-            copy: 'The Firebase project is configured. If the table does not update, check Firestore and Storage rules in Firebase Console.',
+            copy: authReady
+              ? 'Anonymous Firebase auth is active. If the table does not update, check Firestore and Storage rules in Firebase Console.'
+              : 'Firebase config is present, but anonymous sign-in is not confirmed yet. Enable Anonymous sign-in in Firebase Authentication if rules require request.auth.',
           };
         }
         if (!hasFirebaseConfig) {
@@ -684,7 +719,7 @@
         const diagnostic = getDiagnosticMessage();
         globalBackendWarning.hidden = firebaseReady && firebaseSyncReady;
         submissionModeNote.textContent = firebaseReady
-          ? 'Firebase is configured. This enquiry will be saved to Firestore if database and storage rules allow this website.'
+          ? 'Firebase is configured. This enquiry will sign in anonymously and save to Firestore if database and storage rules allow this website.'
           : 'Admin dashboard is local only right now. Email will be sent, but phone-to-laptop dashboard records need Firebase setup.';
         submissionModeNote.classList.toggle('ready', firebaseReady);
         submissionModeNote.classList.toggle('warning', !firebaseReady);
@@ -728,6 +763,7 @@
 
       const uploadDocumentToFirebase = async (file, applicantEmail) => {
         if (!firebaseReady || !file) return { documentUrl: '', storagePath: '' };
+        await authReadyPromise;
         const safeEmail = applicantEmail.replace(/[^a-z0-9]/gi, '_').toLowerCase();
         const storagePath = `loan-documents/${Date.now()}-${safeEmail}-${file.name}`;
         const fileRef = ref(storage, storagePath);
@@ -736,8 +772,9 @@
         return { documentUrl, storagePath };
       };
 
-      const startRemoteDashboardSync = () => {
+      const startRemoteDashboardSync = async () => {
         if (!firebaseReady) return;
+        await authReadyPromise;
         const enquiriesQuery = query(collection(db, 'loanEnquiries'), orderBy('createdAt', 'desc'));
         onSnapshot(enquiriesQuery, (snapshot) => {
           firebaseSyncReady = true;
@@ -1093,21 +1130,35 @@
         documentRequirementField.value = getRequirementText(employmentType.value);
         buildCompleteEmailSummary();
         try {
-          const documentInfo = await uploadDocumentToFirebase(file, user.email);
+          let documentInfo = { documentUrl: '', storagePath: '' };
+          if (firebaseReady) {
+            try {
+              documentInfo = await uploadDocumentToFirebase(file, user.email);
+            } catch (error) {
+              firebaseError = error.message || 'Firebase document upload failed.';
+              console.error('Firebase document upload failed:', error);
+            }
+          }
           const newQuery = collectLoanSummary(documentInfo);
           if (newQuery.documentUrl) {
             newQuery.fullDetails = `${newQuery.fullDetails}\nDocument link: ${newQuery.documentUrl}`;
           }
           if (firebaseReady) {
-            const docRef = await addDoc(collection(db, 'loanEnquiries'), {
-              ...newQuery,
-              createdAt: serverTimestamp(),
-            });
-            newQuery.id = docRef.id;
+            try {
+              await authReadyPromise;
+              const docRef = await addDoc(collection(db, 'loanEnquiries'), {
+                ...newQuery,
+                createdAt: serverTimestamp(),
+              });
+              newQuery.id = docRef.id;
+            } catch (error) {
+              firebaseError = error.message || 'Firebase enquiry save failed.';
+              console.error('Firebase enquiry save failed:', error);
+              savePendingRemoteQuery(newQuery);
+              saveLocalQuery(newQuery);
+            }
           } else {
-            const queries = getLocalQueries();
-            queries.unshift(newQuery);
-            saveLocalQueries(queries.slice(0, 50));
+            saveLocalQuery(newQuery);
           }
           saveLastReceipt(newQuery);
           renderDashboard();
@@ -1143,6 +1194,7 @@
         }
         query.status = button.dataset.queryAction;
         if (firebaseReady && query.id) {
+          await authReadyPromise;
           await updateDoc(doc(db, 'loanEnquiries', query.id), { status: query.status });
         } else {
           saveLocalQueries(queries);

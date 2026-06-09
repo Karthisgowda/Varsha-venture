@@ -8,6 +8,7 @@ Enable these in Firebase Console:
 
 - Cloud Firestore
 - Cloud Storage
+- Authentication > Sign-in method > Anonymous
 
 ## 2. Web config
 
@@ -21,7 +22,21 @@ If the admin dashboard says "Firebase ready", config is loaded but Firestore has
 
 ## 3. Suggested Firestore rules for testing
 
-Use stricter authenticated rules before production. For testing the public form:
+The website now signs in anonymously before saving enquiries. For testing with authenticated anonymous users:
+
+```txt
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /loanEnquiries/{id} {
+      allow create: if request.auth != null;
+      allow read, update: if request.auth != null;
+    }
+  }
+}
+```
+
+For quick public testing only, you can temporarily use:
 
 ```txt
 rules_version = '2';
@@ -36,6 +51,22 @@ service cloud.firestore {
 ```
 
 ## 4. Suggested Storage rules for testing
+
+Authenticated anonymous-user testing:
+
+```txt
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /loan-documents/{allPaths=**} {
+      allow write: if request.auth != null;
+      allow read: if request.auth != null;
+    }
+  }
+}
+```
+
+Quick public testing only:
 
 ```txt
 rules_version = '2';
