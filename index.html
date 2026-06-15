@@ -438,6 +438,10 @@
               <strong id="metric-mode">Local</strong>
             </div>
             <div class="metric-card">
+              <span>Auth status</span>
+              <strong id="metric-auth">Waiting</strong>
+            </div>
+            <div class="metric-card">
               <span>Pending sync</span>
               <strong id="metric-pending">0</strong>
             </div>
@@ -593,6 +597,7 @@
       const metricTotal = document.querySelector('#metric-total');
       const metricAmount = document.querySelector('#metric-amount');
       const metricMode = document.querySelector('#metric-mode');
+      const metricAuth = document.querySelector('#metric-auth');
       const metricPending = document.querySelector('#metric-pending');
       const firebaseSetupPanel = document.querySelector('#firebase-setup-panel');
       const clearDashboardButton = document.querySelector('#clear-dashboard');
@@ -645,6 +650,9 @@
               authReady = false;
               firebaseError = error.message || 'Firebase anonymous sign-in failed.';
               console.error('Firebase anonymous sign-in failed:', error);
+              setTimeout(() => {
+                renderBackendStatus();
+              }, 0);
             });
           firebaseReady = true;
         } catch (error) {
@@ -688,7 +696,7 @@
           return 'Shared dashboard active. Firestore is responding and enquiries from other devices can appear here.';
         }
         if (firebaseReady && !authReady) {
-          return 'Firebase config loaded. Waiting for anonymous Firebase sign-in before confirming shared dashboard access.';
+          return `Firebase config loaded, but anonymous sign-in is not confirmed${firebaseError ? `: ${firebaseError}` : '.'}`;
         }
         if (firebaseReady) {
           return 'Firebase config loaded. Waiting for Firestore and Storage permissions to confirm shared dashboard access.';
@@ -738,6 +746,7 @@
           panel.classList.toggle('warning', !firebaseReady);
         });
         metricMode.textContent = firebaseReady ? (firebaseSyncReady ? 'Shared' : 'Firebase ready') : 'Local only';
+        metricAuth.textContent = firebaseReady ? (authReady ? 'Signed in' : 'Not ready') : 'Off';
         metricPending.textContent = getPendingRemoteQueries().length;
         firebaseSetupPanel.hidden = firebaseReady;
         clearDashboardButton.hidden = firebaseReady;

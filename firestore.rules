@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /loanEnquiries/{id} {
+      allow create: if request.auth != null
+        && request.resource.data.name is string
+        && request.resource.data.email is string
+        && request.resource.data.mobile is string;
+
+      allow read, update: if request.auth != null;
+      allow delete: if false;
+    }
+  }
+}

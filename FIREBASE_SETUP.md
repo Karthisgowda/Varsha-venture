@@ -10,6 +10,8 @@ Enable these in Firebase Console:
 - Cloud Storage
 - Authentication > Sign-in method > Anonymous
 
+The live site depends on Anonymous Authentication. If anonymous sign-in is not enabled, the admin dashboard shows `Auth status: Not ready` and cross-device Firestore sync will not work.
+
 ## 2. Web config
 
 The Firebase web config is installed in `firebase-config.js` for project `karthiks-digital-canvas`.
@@ -22,7 +24,7 @@ If the admin dashboard says "Firebase ready", config is loaded but Firestore has
 
 ## 3. Suggested Firestore rules for testing
 
-The website now signs in anonymously before saving enquiries. For testing with authenticated anonymous users:
+The website now signs in anonymously before saving enquiries. The repo includes this authenticated version in `firestore.rules`:
 
 ```txt
 rules_version = '2';
@@ -52,7 +54,7 @@ service cloud.firestore {
 
 ## 4. Suggested Storage rules for testing
 
-Authenticated anonymous-user testing:
+The repo includes this authenticated version in `storage.rules`:
 
 ```txt
 rules_version = '2';
@@ -95,6 +97,23 @@ These test rules are open enough for development. Before real public use, add Fi
 7. Refresh the admin dashboard on the laptop.
 
 If the dashboard still says `Local only`, the phone record cannot appear on the laptop because the site is still running without Firebase.
+
+If the dashboard says `Firebase ready` but `Auth status` says `Not ready`, enable Anonymous Authentication in Firebase Console. If `Auth status` says `Signed in` but the dashboard is not `Shared`, publish the Firestore and Storage rules.
+
+## Deploy rules with Firebase CLI
+
+After installing and logging into Firebase CLI:
+
+```bash
+firebase use karthiks-digital-canvas
+firebase deploy --only firestore:rules,storage
+```
+
+The repo includes:
+
+- `firebase.json`
+- `firestore.rules`
+- `storage.rules`
 
 ## Pending sync recovery
 
