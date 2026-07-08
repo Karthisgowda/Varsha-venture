@@ -36,3 +36,11 @@ Firebase rule files are included:
 - `firebase.json`
 - `firestore.rules`
 - `storage.rules`
+
+## Completion Planning
+
+- `docs/COMPLETE_ONLINE_WEBSITE_PENDING_WORK.md`
+- `docs/REAL_ESTATE_FEATURES_ROADMAP.md`
+- `docs/FIREBASE_AND_ADMIN_COMPLETION.md`
+- `docs/LAUNCH_CHECKLIST.md`
+- `docs/ADMIN_OPERATIONS.md`
